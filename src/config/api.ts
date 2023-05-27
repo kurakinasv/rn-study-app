@@ -33,5 +33,5 @@ export const endpoints = {
   getNotes: '/note/notes',
   createNote: '/note/createNote',
   editNote: '/note/editNote',
-  deleteNote: '/note/deleteNote',
+  deleteNote: '/note/deleteNote/',
 };

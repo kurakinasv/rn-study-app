@@ -24,6 +24,10 @@ class AuthStore {
     this.token = token;
   };
 
+  setIsAuth = (state: boolean) => {
+    this.isAuth = state;
+  };
+
   init = async () => {
     try {
       const userJSON = await AsyncStorage.getItem(userStorageName);
@@ -45,7 +49,7 @@ class AuthStore {
 
     this.userId = userId;
     this.setToken(token);
-    this.isAuth = true;
+    this.setIsAuth(true);
   };
 
   login = async (email: string, password: string) => {
@@ -66,7 +70,7 @@ class AuthStore {
         Alert.alert('Error', error.response?.data.message);
       } else if (error instanceof Error) {
         // todo remove Alert
-        Alert.alert('Error', error.message);
+        Alert.alert('Unknown error', error.message);
       }
     }
   };
@@ -89,14 +93,14 @@ class AuthStore {
         Alert.alert('Error', error.response?.data.message);
       } else if (error instanceof Error) {
         // todo remove Alert
-        Alert.alert('Error', error.message);
+        Alert.alert('Unknown error', error.message);
       }
     }
   };
 
   logout = async () => {
     await AsyncStorage.removeItem(userStorageName);
-    this.isAuth = false;
+    this.setIsAuth(false);
     this.setToken('');
     this.userId = '';
   };

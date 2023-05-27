@@ -1,14 +1,3 @@
-import { View, Text } from 'react-native';
+import CreateNote from '@screens/note/create-note';
 
-import { Stack } from 'expo-router';
-
-const CreateNote = () => {
-  return (
-    <View>
-      <Stack.Screen options={{ headerTitle: 'Create Note' }} />
-      <Text>CreateNote page</Text>
-    </View>
-  );
-};
-
-export default CreateNote;
+export default () => <CreateNote />;
