@@ -5,6 +5,7 @@ export default () => {
     <Stack>
       <Stack.Screen name="index" />
       <Stack.Screen name="cards" options={{ headerShown: false }} />
+      <Stack.Screen name="learning" />
     </Stack>
   );
 };

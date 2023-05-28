@@ -1,59 +1,53 @@
-import React, { useEffect, useCallback } from 'react';
-import { FlatList, Alert } from 'react-native';
+import React, { useCallback, useEffect } from 'react';
+import { Alert } from 'react-native';
 
 import { Entypo } from '@expo/vector-icons';
-import { Redirect, useRouter } from 'expo-router';
+import { useRouter } from 'expo-router';
 import { observer } from 'mobx-react';
+import { FlatList } from 'react-native-gesture-handler';
 import { Menu, MenuOption, MenuOptions, MenuProvider, MenuTrigger } from 'react-native-popup-menu';
 
 import FloatButton from '@components/FloatButton';
-import { useAuthStore, useNotesStore } from '@stores/RootStore/hooks';
+import { useMemoStore } from '@stores/RootStore/hooks';
 import { colors } from '@styles/colors';
 import { PageView } from '@styles/components';
 import { UniqueId } from '@typings/common';
 
-import { NoteContainer, NoteText, StyledLoader } from './Notes.styles';
+import { MemoPacksContainer, PackInfo } from './Memo.styles';
 
-const Notes = () => {
+const Memo = () => {
   const router = useRouter();
 
-  const auth = useAuthStore();
-  const { getNotes, notes, deleteNote, loading } = useNotesStore();
+  const { getMemoPacks, loading, memoPacks, deleteMemoPack } = useMemoStore();
 
   useEffect(() => {
-    getNotes();
+    getMemoPacks();
   }, []);
 
-  const goToCreateNote = useCallback(() => {
-    router.push('notes/createNote');
+  const goToCreatePack = useCallback(() => {
+    router.push('/memo/createMemoPack');
   }, []);
 
   const handleDelete = (id: UniqueId) => () => {
     Alert.alert(
-      'Удалить заметку?',
-      '',
+      'Удалить набор?',
+      'Также будут удалены все карточки, которые в нём находятся',
       [
         { text: 'Нет', style: 'cancel' },
-        { text: 'Да', onPress: () => deleteNote(id), style: 'destructive' },
+        { text: 'Да', onPress: () => deleteMemoPack(id), style: 'destructive' },
       ],
       { cancelable: true }
     );
   };
 
-  if (!auth.isAuth) {
-    return <Redirect href="auth" />;
-  }
-
   return (
-    <MenuProvider>
-      {loading && <StyledLoader size="large" color={colors.blue} />}
-
-      <PageView>
+    <PageView>
+      <MenuProvider skipInstanceCheck>
         <FlatList
-          data={notes}
-          renderItem={({ item, index }) => (
-            <NoteContainer onPress={() => router.push(`/notes/${item._id}`)}>
-              <NoteText>{item.title || `note #${index + 1}`}</NoteText>
+          data={memoPacks}
+          renderItem={({ item }) => (
+            <MemoPacksContainer onPress={() => router.push(`/memoPacks/${item._id}`)}>
+              <PackInfo>{item.name}</PackInfo>
 
               <Menu>
                 <MenuTrigger
@@ -72,14 +66,14 @@ const Notes = () => {
                   />
                 </MenuOptions>
               </Menu>
-            </NoteContainer>
+            </MemoPacksContainer>
           )}
         />
+      </MenuProvider>
 
-        <FloatButton icon="plus" onPressAction={goToCreateNote} />
-      </PageView>
-    </MenuProvider>
+      <FloatButton icon="plus" onPressAction={goToCreatePack} disabled={loading} />
+    </PageView>
   );
 };
 
-export default observer(Notes);
+export default observer(Memo);

@@ -81,7 +81,7 @@ const Note = ({
         height={height}
       />
 
-      <FloatButton icon="check" onPressAction={saveNote} disabled={loading} />
+      <FloatButton icon="check" onPressAction={saveNote} disabled={loading} loading={loading} />
     </ContainerView>
   );
 };

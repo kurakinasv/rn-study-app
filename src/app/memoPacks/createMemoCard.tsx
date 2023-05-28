@@ -1,11 +1,3 @@
-import { View, Text } from 'react-native';
+import CreateMemoCard from '@screens/memo-card/create-memo-card';
 
-const CreateMemoCard = () => {
-  return (
-    <View>
-      <Text>CreateMemoCard page</Text>
-    </View>
-  );
-};
-
-export default CreateMemoCard;
+export default () => <CreateMemoCard />;

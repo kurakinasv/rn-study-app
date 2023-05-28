@@ -1,13 +1,8 @@
-import { View, Pressable, ActivityIndicator } from 'react-native';
+import { Pressable, ActivityIndicator } from 'react-native';
 
 import styled from 'styled-components/native';
 
 import { colors } from '@styles/colors';
-
-export const NotesView = styled.View`
-  flex: 1;
-  padding: 20px;
-` as typeof View;
 
 export const StyledLoader = styled.ActivityIndicator`
   position: absolute;

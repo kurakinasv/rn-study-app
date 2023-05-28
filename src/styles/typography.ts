@@ -6,6 +6,10 @@ export const fontFamilies = {
   MontserratMedium: 'Montserrat-Medium',
   MontserratSemiBold: 'Montserrat-SemiBold',
   MontserratExtraBold: 'Montserrat-ExtraBold',
+
+  Rubik: 'Rubik',
+  RubikLight: 'Rubik-Light',
+  RubikSemibold: 'Rubik-SemoBold',
 };
 
 export const header = (size: number, color = colors.black) => {

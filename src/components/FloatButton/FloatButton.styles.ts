@@ -1,6 +1,6 @@
 import { Pressable } from 'react-native';
 
-import { styled } from 'styled-components';
+import styled from 'styled-components';
 
 import { colors } from '@styles/colors';
 
@@ -15,6 +15,6 @@ export const ButtonWrapper = styled(Pressable)`
   align-items: center;
   justify-content: center;
 
-  background-color: ${colors.blue};
+  background-color: ${({ disabled }) => (disabled ? 'rgba(75, 109, 155, 0.7)' : colors.blue)};
   border-radius: 25px;
 `;

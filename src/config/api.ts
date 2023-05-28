@@ -34,4 +34,14 @@ export const endpoints = {
   createNote: '/note/createNote',
   editNote: '/note/editNote',
   deleteNote: '/note/deleteNote/',
+
+  getMemoPacks: '/memoPack/memoPacks',
+  createMemoPack: '/memoPack/createMemoPack',
+  editMemoPack: '/memoPack/editMemoPack',
+  deleteMemoPack: '/memoPack/deleteMemoPack/',
+
+  getAllCards: '/memoCard/cards',
+  createMemoCard: '/memoCard/createCard',
+  editMemoCard: '/memoCard/editCard',
+  deleteMemoCard: '/memoCard/deleteCard/',
 };

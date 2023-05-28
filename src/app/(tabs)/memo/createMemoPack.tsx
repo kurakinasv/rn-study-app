@@ -1,11 +1,3 @@
-import { Text, View } from 'react-native';
+import CreateMemoPack from '@screens/memo-pack/create-memo-pack';
 
-const CreateMemoPack = () => {
-  return (
-    <View>
-      <Text>CreateMemoPack page</Text>
-    </View>
-  );
-};
-
-export default CreateMemoPack;
+export default () => <CreateMemoPack />;
