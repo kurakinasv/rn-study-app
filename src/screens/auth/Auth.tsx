@@ -1,9 +1,18 @@
 import { useState, useEffect } from 'react';
-import { SafeAreaView, Text, Pressable, TextInput, Alert, ActivityIndicator } from 'react-native';
+import {
+  SafeAreaView,
+  Text,
+  Pressable,
+  TextInput,
+  Alert,
+  ActivityIndicator,
+  ToastAndroid,
+} from 'react-native';
 
 import { Redirect } from 'expo-router';
 import { observer } from 'mobx-react';
 
+import { routes } from '@config/routes';
 import { useAuthStore } from '@stores/RootStore/hooks';
 
 const Auth = () => {
@@ -23,6 +32,7 @@ const Auth = () => {
 
     if (email && password) {
       await auth.login(email, password);
+      ToastAndroid.show('Авторизация выполнена', ToastAndroid.SHORT);
     } else {
       Alert.alert('Error', 'Заполните все поля');
     }
@@ -35,6 +45,7 @@ const Auth = () => {
 
     if (email && password) {
       await auth.register(email, password);
+      ToastAndroid.show('Авторизация выполнена', ToastAndroid.SHORT);
     } else {
       Alert.alert('Error', 'Заполните все поля');
     }
@@ -43,7 +54,7 @@ const Auth = () => {
   };
 
   if (auth.isAuth) {
-    return <Redirect href="notes" />;
+    return <Redirect href={routes.notes} />;
   }
 
   return (

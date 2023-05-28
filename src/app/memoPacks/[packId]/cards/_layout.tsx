@@ -1,3 +1,5 @@
 import { Stack } from 'expo-router';
 
-export default () => <Stack />;
+import { headerStyles } from '@styles/components';
+
+export default () => <Stack screenOptions={{ ...headerStyles }} />;

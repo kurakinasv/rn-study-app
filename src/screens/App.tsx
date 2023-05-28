@@ -6,6 +6,8 @@ import { Redirect } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import styled from 'styled-components';
 
+import { routes } from '@config/routes';
+
 SplashScreen.preventAutoHideAsync();
 
 const SafeAreaContainer = styled(SafeAreaView)`
@@ -38,7 +40,7 @@ const App = () => {
 
   return (
     <SafeAreaContainer onLayout={onLayoutRootView}>
-      <Redirect href="auth" />
+      <Redirect href={routes.auth} />
     </SafeAreaContainer>
   );
 };

@@ -38,8 +38,7 @@ class AuthStore {
       }
     } catch (error) {
       if (error instanceof Error) {
-        // todo remove Alert
-        Alert.alert('Error', error.message);
+        console.log('Init error', error.message);
       }
     }
   };
@@ -61,8 +60,6 @@ class AuthStore {
       if (res.data) {
         const { userId, token } = res.data;
         await this.authenticate(token, userId);
-        // todo change
-        Alert.alert('Logged In', JSON.stringify({ userId, token }));
       }
     } catch (error) {
       if (isAxiosError(error)) {
@@ -83,9 +80,6 @@ class AuthStore {
 
       if (res.data) {
         await this.login(email, password);
-
-        // todo change
-        Alert.alert('Registered', JSON.stringify({ email }));
       }
     } catch (error) {
       if (isAxiosError(error)) {

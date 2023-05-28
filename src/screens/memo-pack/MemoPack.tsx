@@ -1,11 +1,11 @@
-import { useState, useMemo, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { FlatList, Pressable, Text } from 'react-native';
 
-import { Ionicons } from '@expo/vector-icons';
 import { Stack, useRouter, useSearchParams } from 'expo-router';
 import { observer } from 'mobx-react';
 
 import FloatButton from '@components/FloatButton/FloatButton';
+import { routes } from '@config/routes';
 import { MemoPackModel } from '@stores/models/memo';
 import { useMemoStore } from '@stores/RootStore/hooks';
 import { PageView } from '@styles/components';
@@ -30,40 +30,26 @@ const MemoPack = () => {
     }
   }, [packId]);
 
-  const ArrowBack = useMemo(
-    () => () =>
-      (
-        <Ionicons
-          onPress={() => router.back()}
-          name="arrow-back"
-          size={24}
-          color="black"
-          style={{ marginRight: 24 }}
-        />
-      ),
-    []
-  );
-
   const goToCreateCard = useCallback(() => {
-    router.push({ pathname: `/memoPacks/createMemoCard`, params: { packId } });
+    router.push({ pathname: routes.createMemoCard, params: { packId } });
   }, []);
 
-  if (!packInfo) {
+  if (!packInfo || typeof packId !== 'string') {
     return null;
   }
 
   return (
     <PageView>
-      <Stack.Screen options={{ headerTitle: packInfo.name, headerLeft: ArrowBack }} />
+      <Stack.Screen options={{ headerTitle: packInfo.name }} />
 
-      <Pressable onPress={() => router.push(`/memoPacks/${packId}/learning`)}>
+      <Pressable onPress={() => router.push(routes.learning(packId))}>
         <Text>Обучение</Text>
       </Pressable>
 
       <FlatList
         data={cardsFromCurrentPack}
         renderItem={({ item }) => (
-          <MemoCardContainer onPress={() => router.push(`/memoPacks/${packId}/cards/${item._id}`)}>
+          <MemoCardContainer onPress={() => router.push(routes.card(packId, item._id))}>
             <CardInfo>{item.question}</CardInfo>
             <CardInfo>{item.answer}</CardInfo>
           </MemoCardContainer>

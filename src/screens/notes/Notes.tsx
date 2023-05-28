@@ -7,6 +7,7 @@ import { observer } from 'mobx-react';
 import { Menu, MenuOption, MenuOptions, MenuProvider, MenuTrigger } from 'react-native-popup-menu';
 
 import FloatButton from '@components/FloatButton';
+import { routes } from '@config/routes';
 import { useAuthStore, useNotesStore } from '@stores/RootStore/hooks';
 import { colors } from '@styles/colors';
 import { PageView } from '@styles/components';
@@ -25,7 +26,7 @@ const Notes = () => {
   }, []);
 
   const goToCreateNote = useCallback(() => {
-    router.push('notes/createNote');
+    router.push(routes.createNote);
   }, []);
 
   const handleDelete = (id: UniqueId) => () => {
@@ -41,7 +42,7 @@ const Notes = () => {
   };
 
   if (!auth.isAuth) {
-    return <Redirect href="auth" />;
+    return <Redirect href={routes.auth} />;
   }
 
   return (
@@ -52,7 +53,7 @@ const Notes = () => {
         <FlatList
           data={notes}
           renderItem={({ item, index }) => (
-            <NoteContainer onPress={() => router.push(`/notes/${item._id}`)}>
+            <NoteContainer onPress={() => router.push(routes.note(item._id))}>
               <NoteText>{item.title || `note #${index + 1}`}</NoteText>
 
               <Menu>

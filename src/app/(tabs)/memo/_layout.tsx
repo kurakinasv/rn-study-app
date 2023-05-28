@@ -1,10 +1,10 @@
 import { Stack } from 'expo-router';
 
-export default () => {
-  return (
-    <Stack>
-      <Stack.Screen name="index" options={{ headerTitle: 'Memo' }} />
-      <Stack.Screen name="createMemoPack" options={{ headerTitle: 'CreateMemoPack' }} />
-    </Stack>
-  );
-};
+import { headerStyles } from '@styles/components';
+
+export default () => (
+  <Stack screenOptions={{ ...headerStyles }}>
+    <Stack.Screen name="index" options={{ headerTitle: 'Мемо' }} />
+    <Stack.Screen name="createMemoPack" options={{ headerTitle: 'Создание набора' }} />
+  </Stack>
+);

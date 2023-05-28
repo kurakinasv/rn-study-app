@@ -8,6 +8,7 @@ import { FlatList } from 'react-native-gesture-handler';
 import { Menu, MenuOption, MenuOptions, MenuProvider, MenuTrigger } from 'react-native-popup-menu';
 
 import FloatButton from '@components/FloatButton';
+import { routes } from '@config/routes';
 import { useMemoStore } from '@stores/RootStore/hooks';
 import { colors } from '@styles/colors';
 import { PageView } from '@styles/components';
@@ -25,7 +26,7 @@ const Memo = () => {
   }, []);
 
   const goToCreatePack = useCallback(() => {
-    router.push('/memo/createMemoPack');
+    router.push(routes.createMemoPack);
   }, []);
 
   const handleDelete = (id: UniqueId) => () => {
@@ -46,7 +47,7 @@ const Memo = () => {
         <FlatList
           data={memoPacks}
           renderItem={({ item }) => (
-            <MemoPacksContainer onPress={() => router.push(`/memoPacks/${item._id}`)}>
+            <MemoPacksContainer onPress={() => router.push(routes.memoPack(item._id))}>
               <PackInfo>{item.name}</PackInfo>
 
               <Menu>
