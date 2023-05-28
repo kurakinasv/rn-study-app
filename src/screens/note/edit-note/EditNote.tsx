@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { useSearchParams } from 'expo-router';
 import { observer } from 'mobx-react';
 
-import { NoteModel } from '@stores/NotesStore/types';
+import { NoteModel } from '@stores/models/note';
 import { useNotesStore } from '@stores/RootStore/hooks';
 
 import Note from '../Note';
@@ -48,6 +48,7 @@ const EditNote = () => {
       alertButtonTitle="Заметка сохранена"
       loading={loading}
       pageTitle="Заметка"
+      date={note.createdAt}
     />
   ) : null;
 };

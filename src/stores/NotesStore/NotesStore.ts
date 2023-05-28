@@ -4,10 +4,9 @@ import { isAxiosError } from 'axios';
 import { makeAutoObservable } from 'mobx';
 
 import { api, endpoints } from '@config/api';
+import { NoteModel } from '@stores/models/note';
 import RootStore from '@stores/RootStore';
 import { UniqueId } from '@typings/common';
-
-import { NoteModel } from './types';
 
 class NotesStore {
   private readonly root: RootStore | null = null;

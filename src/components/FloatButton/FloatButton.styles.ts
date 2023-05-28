@@ -10,7 +10,7 @@ export const ButtonWrapper = styled(Pressable)`
 
   position: absolute;
   bottom: 5%;
-  right: 10%;
+  right: 12%;
 
   align-items: center;
   justify-content: center;

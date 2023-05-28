@@ -1,26 +1,43 @@
-import { TextInput, View } from 'react-native';
+import { TextInput, Text, View } from 'react-native';
 
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
-import { colors } from '@styles/colors';
-import { header } from '@styles/typography';
-
-export const ContainerView = styled(View)`
-  flex: 1;
-  padding: 10px;
-`;
+import { colors, rgb } from '@styles/colors';
+import { additionalText, header } from '@styles/typography';
 
 export const StyledHeader = styled(TextInput).attrs({
   placeholderTextColor: colors.textGray,
 })`
   ${header(3)}
+  margin-bottom: 6px;
+  padding: 8px 0;
+
+  border-bottom-color: rgba(${rgb.textGray}, 0.5);
+  border-bottom-width: 1px;
 ` as typeof TextInput;
 
-export const StyledInput = styled(TextInput).attrs({
-  textAlignVertical: 'top',
-})<{ height: number }>`
-  border-width: 1px;
-  border-color: ${colors.textGray};
-  padding: 10px;
-  height: ${({ height }) => height + 'px'};
+export const DateCreated = styled(Text)`
+  ${additionalText()}
+  margin-bottom: 17px;
+`;
+
+export const FloatButtonWrapper = styled(View)<{ keyboardShown: boolean }>`
+  ${({ keyboardShown }) =>
+    keyboardShown
+      ? css`
+          position: relative;
+          bottom: 10%;
+          right: -10%;
+        `
+      : css`
+          position: absolute;
+          bottom: 5%;
+          right: 12%;
+        `}
+`;
+
+export const ErrorText = styled(Text)`
+  margin-top: 6px;
+  font-size: 14px;
+  color: rgba(${rgb.red}, 0.7);
 `;

@@ -1,3 +1,5 @@
+import { css } from 'styled-components';
+
 import { colors } from './colors';
 
 export const fontFamilies = {
@@ -14,10 +16,18 @@ export const fontFamilies = {
 
 export const header = (size: number, color = colors.black) => {
   if (size === 3) {
-    return `
-            font-family: ${fontFamilies.MontserratSemiBold};
-            font-size: 18px;
-            color: ${color};
-        `;
+    return css`
+      font-family: ${fontFamilies.MontserratSemiBold};
+      font-size: 18px;
+      color: ${color};
+    `;
   }
+};
+
+export const additionalText = (color = colors.textGray) => {
+  return css`
+    font-family: ${fontFamilies.Rubik};
+    font-size: 10px;
+    color: ${color};
+  `;
 };

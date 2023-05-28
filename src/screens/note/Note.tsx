@@ -1,11 +1,17 @@
-import { useState, memo, useCallback } from 'react';
-import { Alert } from 'react-native';
+import { useState, memo, useCallback, useRef } from 'react';
+import { Alert, ScrollView } from 'react-native';
 
 import { Stack, useRouter } from 'expo-router';
+import { RichEditor, RichToolbar, actions } from 'react-native-pell-rich-editor';
 
 import FloatButton from '@components/FloatButton';
+import { InputType } from '@stores/models/note';
+import { colors, rgb } from '@styles/colors';
+import { PageView } from '@styles/components';
+import { DateString } from '@typings/common';
 
-import { ContainerView, StyledHeader, StyledInput } from './Note.styles';
+import { DateCreated, ErrorText, FloatButtonWrapper, StyledHeader } from './Note.styles';
+import useNote from './useNote';
 
 type Props = {
   noteAction: (title: string, content: string) => Promise<void>;
@@ -14,6 +20,7 @@ type Props = {
   pageTitle: string;
   initialTitle: string;
   initialContent: string;
+  date?: DateString;
 };
 
 const Note = ({
@@ -23,15 +30,47 @@ const Note = ({
   pageTitle,
   initialTitle,
   initialContent,
+  date,
 }: Props) => {
   const router = useRouter();
+
+  const editorRef = useRef(null);
 
   const [title, setTitle] = useState(initialTitle);
   const [content, setContent] = useState(initialContent);
 
-  const [height, setHeight] = useState(35);
+  const {
+    keyboardShown,
+    focused,
+    showEmptyError,
+    focuseInput,
+    blurInput,
+    validateNote,
+    setShowEmptyError,
+  } = useNote();
+
+  const handleInput = useCallback(
+    (inputName: InputType) => (text: string) => {
+      switch (inputName) {
+        case InputType.CONTENT:
+          if (text) {
+            setShowEmptyError(false);
+          }
+          setContent(text);
+          break;
+        case InputType.TITLE:
+          setTitle(text);
+          break;
+      }
+    },
+    []
+  );
 
   const saveNote = async () => {
+    if (!validateNote(title, content)) {
+      return;
+    }
+
     await noteAction(title, content);
 
     Alert.alert(alertButtonTitle, '', [
@@ -42,22 +81,8 @@ const Note = ({
     ]);
   };
 
-  const handleInput = useCallback(
-    (inputName: 'text' | 'title') => (text: string) => {
-      switch (inputName) {
-        case 'text':
-          setContent(text);
-          break;
-        case 'title':
-          setTitle(text);
-          break;
-      }
-    },
-    []
-  );
-
   return (
-    <ContainerView>
+    <PageView>
       <Stack.Screen options={{ headerTitle: pageTitle }} />
 
       <StyledHeader
@@ -65,24 +90,53 @@ const Note = ({
         inputMode="text"
         value={title}
         placeholder="Заголовок"
-        onChangeText={handleInput('title')}
-        selectTextOnFocus={!loading}
+        onChangeText={handleInput(InputType.TITLE)}
       />
 
-      <StyledInput
-        editable={!loading}
-        multiline
-        inputMode="text"
-        onChangeText={handleInput('text')}
-        value={content}
-        onContentSizeChange={(event) => {
-          setHeight(event.nativeEvent.contentSize.height);
-        }}
-        height={height}
-      />
+      <DateCreated>
+        {date ? new Date(date).toLocaleDateString() : new Date().toLocaleDateString()}
+      </DateCreated>
 
-      <FloatButton icon="check" onPressAction={saveNote} disabled={loading} loading={loading} />
-    </ContainerView>
+      <ScrollView>
+        <RichEditor
+          ref={editorRef}
+          initialContentHTML={initialContent}
+          disabled={loading}
+          onChange={handleInput(InputType.CONTENT)}
+          placeholder="Что бы вы хотели запомнить?"
+          containerStyle={{ borderRadius: 6 }}
+          androidHardwareAccelerationDisabled={true}
+          initialHeight={250}
+          onFocus={focuseInput}
+          onBlur={blurInput}
+        />
+        {showEmptyError && <ErrorText>Заметка не может быть пустой</ErrorText>}
+      </ScrollView>
+
+      {focused && keyboardShown && (
+        <RichToolbar
+          editor={editorRef}
+          selectedIconTint={colors.purple}
+          iconTint={`rgba(${rgb.purple}, 0.5)`}
+          iconSize={24}
+          actions={[
+            actions.keyboard,
+            actions.setBold,
+            actions.setItalic,
+            actions.setUnderline,
+            actions.setStrikethrough,
+            actions.insertBulletsList,
+            actions.insertLink,
+            actions.undo,
+            actions.redo,
+          ]}
+        />
+      )}
+
+      <FloatButtonWrapper keyboardShown={keyboardShown}>
+        <FloatButton icon="check" onPressAction={saveNote} disabled={loading} loading={loading} />
+      </FloatButtonWrapper>
+    </PageView>
   );
 };
 
