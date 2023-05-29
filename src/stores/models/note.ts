@@ -10,6 +10,9 @@ export type NoteModel = {
   title: string;
   content: string;
   createdAt: DateString;
+  nextRepetition?: DateString;
+  group?: UniqueId;
+  groupName?: string;
 };
 
 export type NoteApi = {

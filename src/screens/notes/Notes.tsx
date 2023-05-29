@@ -10,10 +10,18 @@ import FloatButton from '@components/FloatButton';
 import { routes } from '@config/routes';
 import { useAuthStore, useNotesStore } from '@stores/RootStore/hooks';
 import { colors } from '@styles/colors';
-import { PageView } from '@styles/components';
+import { PageLoader } from '@styles/components';
 import { UniqueId } from '@typings/common';
+import { divToLineBreaks } from '@utils/replaceHTML';
 
-import { NoteContainer, NoteText, StyledLoader } from './Notes.styles';
+import {
+  NoteContainer,
+  NoteView,
+  NoteContent,
+  NoteInfo,
+  NoteTitle,
+  NotesView,
+} from './Notes.styles';
 
 const Notes = () => {
   const router = useRouter();
@@ -47,14 +55,20 @@ const Notes = () => {
 
   return (
     <MenuProvider>
-      {loading && <StyledLoader size="large" color={colors.blue} />}
+      {loading && <PageLoader size="large" color={colors.blue} />}
 
-      <PageView>
+      <NotesView>
         <FlatList
           data={notes}
-          renderItem={({ item, index }) => (
+          renderItem={({ item }) => (
             <NoteContainer onPress={() => router.push(routes.note(item._id))}>
-              <NoteText>{item.title || `note #${index + 1}`}</NoteText>
+              <NoteView>
+                {item.title && <NoteTitle>{item.title}</NoteTitle>}
+                {item.groupName && <NoteInfo>{item.groupName}</NoteInfo>}
+                {item.content && (
+                  <NoteContent numberOfLines={3}>{divToLineBreaks(item.content)}</NoteContent>
+                )}
+              </NoteView>
 
               <Menu>
                 <MenuTrigger
@@ -78,7 +92,7 @@ const Notes = () => {
         />
 
         <FloatButton icon="plus" onPressAction={goToCreateNote} />
-      </PageView>
+      </NotesView>
     </MenuProvider>
   );
 };

@@ -31,3 +31,11 @@ export const additionalText = (color = colors.textGray) => {
     color: ${color};
   `;
 };
+
+export const regularText = (color = colors.black) => {
+  return css`
+    font-family: ${fontFamilies.Rubik};
+    font-size: 13px;
+    color: ${color};
+  `;
+};

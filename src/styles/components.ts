@@ -1,4 +1,4 @@
-import { View } from 'react-native';
+import { View, ActivityIndicator } from 'react-native';
 
 import styled from 'styled-components/native';
 
@@ -18,3 +18,12 @@ export const headerStyles = {
     fontSize: 20,
   },
 };
+
+export const PageLoader = styled.ActivityIndicator`
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.1);
+  z-index: 10;
+  transform: scale(1.5);
+` as typeof ActivityIndicator;

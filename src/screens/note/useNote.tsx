@@ -1,6 +1,8 @@
 import { useCallback, useEffect, useState } from 'react';
 import { Keyboard } from 'react-native';
 
+import { removeSpaces, replaceHTML } from '@utils/replaceHTML';
+
 const useNote = () => {
   const [focused, setFocused] = useState(false);
   const [keyboardShown, setKeyboardShown] = useState(false);
@@ -29,9 +31,8 @@ const useNote = () => {
   }, []);
 
   const validateNote = useCallback((title: string, content: string) => {
-    // replace with the empty string
-    const replaceHTML = content.replace(/<(.|\n)*?>/g, '').trim();
-    const replaceWhiteSpace = replaceHTML.replace(/&nbsp;/g, '').trim();
+    const replaced = replaceHTML(content);
+    const replaceWhiteSpace = removeSpaces(replaced);
 
     if (!replaceWhiteSpace.length && !title.length) {
       setShowEmptyError(true);
