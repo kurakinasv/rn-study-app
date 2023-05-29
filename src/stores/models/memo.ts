@@ -1,4 +1,4 @@
-import { UniqueId } from '@typings/common';
+import { DateString, UniqueId } from '@typings/common';
 
 export type MemoCardState = 'difficult' | 'normal' | 'easy' | 'new';
 
@@ -18,16 +18,17 @@ export type MemoCardModel = {
   question: string;
   answer: string;
   state: MemoCardState;
-  createdAt: Date;
+  createdAt: DateString;
 };
 
 export type MemoPackModel = {
   _id: UniqueId;
   name: string;
   cards: MemoCardModel[];
-  createdAt: Date;
+  createdAt: DateString;
   archived: boolean;
-  lastRepetition?: Date;
-  nextRepetition?: Date;
+  lastRepetition?: DateString;
+  nextRepetition?: DateString;
   group?: UniqueId;
+  groupName?: string;
 };

@@ -6,8 +6,9 @@ import { RichEditor, RichToolbar, actions } from 'react-native-pell-rich-editor'
 
 import FloatButton from '@components/FloatButton';
 import { InputType } from '@stores/models/note';
-import { colors, rgb } from '@styles/colors';
+import { colors } from '@styles/colors';
 import { PageView } from '@styles/components';
+import { rgbaColor } from '@styles/mixins';
 import { DateString } from '@typings/common';
 
 import { DateCreated, ErrorText, FloatButtonWrapper, StyledHeader } from './Note.styles';
@@ -117,7 +118,7 @@ const Note = ({
         <RichToolbar
           editor={editorRef}
           selectedIconTint={colors.purple}
-          iconTint={`rgba(${rgb.purple}, 0.5)`}
+          iconTint={rgbaColor('purple', 0.5)}
           iconSize={24}
           actions={[
             actions.keyboard,

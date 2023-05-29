@@ -1,5 +1,5 @@
 import React, { useEffect, useCallback } from 'react';
-import { FlatList, Alert } from 'react-native';
+import { Alert } from 'react-native';
 
 import { Entypo } from '@expo/vector-icons';
 import { Redirect, useRouter } from 'expo-router';
@@ -10,18 +10,19 @@ import FloatButton from '@components/FloatButton';
 import { routes } from '@config/routes';
 import { useAuthStore, useNotesStore } from '@stores/RootStore/hooks';
 import { colors } from '@styles/colors';
-import { PageLoader } from '@styles/components';
+import {
+  CardContainer as NoteContainer,
+  CardInfo,
+  CardTitle,
+  CardView,
+  CardsList as NotesList,
+  PageLoader,
+  PageView,
+} from '@styles/components';
 import { UniqueId } from '@typings/common';
 import { divToLineBreaks } from '@utils/replaceHTML';
 
-import {
-  NoteContainer,
-  NoteView,
-  NoteContent,
-  NoteInfo,
-  NoteTitle,
-  NotesView,
-} from './Notes.styles';
+import { NoteContent } from './Notes.styles';
 
 const Notes = () => {
   const router = useRouter();
@@ -57,18 +58,18 @@ const Notes = () => {
     <MenuProvider>
       {loading && <PageLoader size="large" color={colors.blue} />}
 
-      <NotesView>
-        <FlatList
+      <PageView>
+        <NotesList
           data={notes}
           renderItem={({ item }) => (
             <NoteContainer onPress={() => router.push(routes.note(item._id))}>
-              <NoteView>
-                {item.title && <NoteTitle>{item.title}</NoteTitle>}
-                {item.groupName && <NoteInfo>{item.groupName}</NoteInfo>}
+              <CardView>
+                {item.title && <CardTitle>{item.title}</CardTitle>}
+                {item.groupName && <CardInfo>{item.groupName}</CardInfo>}
                 {item.content && (
                   <NoteContent numberOfLines={3}>{divToLineBreaks(item.content)}</NoteContent>
                 )}
-              </NoteView>
+              </CardView>
 
               <Menu>
                 <MenuTrigger
@@ -92,7 +93,7 @@ const Notes = () => {
         />
 
         <FloatButton icon="plus" onPressAction={goToCreateNote} />
-      </NotesView>
+      </PageView>
     </MenuProvider>
   );
 };

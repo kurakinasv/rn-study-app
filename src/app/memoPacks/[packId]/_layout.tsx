@@ -2,6 +2,7 @@ import { useMemo } from 'react';
 
 import { Ionicons } from '@expo/vector-icons';
 import { Stack, useRouter } from 'expo-router';
+import { MenuProvider } from 'react-native-popup-menu';
 
 import { colors } from '@styles/colors';
 import { headerStyles } from '@styles/components';
@@ -24,10 +25,12 @@ export default () => {
   );
 
   return (
-    <Stack screenOptions={{ ...headerStyles }}>
-      <Stack.Screen name="index" options={{ headerLeft: ArrowBack }} />
-      <Stack.Screen name="cards" options={{ headerShown: false }} />
-      <Stack.Screen name="learning" />
-    </Stack>
+    <MenuProvider skipInstanceCheck>
+      <Stack screenOptions={{ ...headerStyles }}>
+        <Stack.Screen name="index" options={{ headerLeft: ArrowBack }} />
+        <Stack.Screen name="cards" options={{ headerShown: false }} />
+        <Stack.Screen name="learning" />
+      </Stack>
+    </MenuProvider>
   );
 };

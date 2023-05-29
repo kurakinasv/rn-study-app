@@ -2,7 +2,8 @@ import { TextInput, Text, View } from 'react-native';
 
 import styled, { css } from 'styled-components';
 
-import { colors, rgb } from '@styles/colors';
+import { colors } from '@styles/colors';
+import { rgbaColor } from '@styles/mixins';
 import { additionalText, header } from '@styles/typography';
 
 export const StyledHeader = styled(TextInput).attrs({
@@ -12,7 +13,7 @@ export const StyledHeader = styled(TextInput).attrs({
   margin-bottom: 6px;
   padding: 8px 0;
 
-  border-bottom-color: rgba(${rgb.textGray}, 0.5);
+  border-bottom-color: ${rgbaColor('textGray', 0.5)};
   border-bottom-width: 1px;
 ` as typeof TextInput;
 
@@ -39,5 +40,5 @@ export const FloatButtonWrapper = styled(View)<{ keyboardShown: boolean }>`
 export const ErrorText = styled(Text)`
   margin-top: 6px;
   font-size: 14px;
-  color: rgba(${rgb.red}, 0.7);
+  color: ${rgbaColor('red', 0.7)};
 `;

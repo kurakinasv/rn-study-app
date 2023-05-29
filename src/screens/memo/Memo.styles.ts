@@ -1,20 +1,23 @@
-import { Pressable } from 'react-native';
+import { Pressable, TextInput } from 'react-native';
 
 import styled from 'styled-components/native';
 
-import { colors } from '@styles/colors';
+import { colors, rgb } from '@styles/colors';
+import { CardContainer } from '@styles/components';
+import { rgbaColor } from '@styles/mixins';
 
-export const MemoPacksContainer = styled.Pressable`
-  flex-direction: row;
-
-  padding: 12px;
-  margin-bottom: 10px;
-  background-color: ${colors.lightGray};
-  border-radius: 8px;
-  border-color: ${colors.textGray};
-  border-width: 1px;
+export const MemoPackContainer = styled(CardContainer)`
+  align-items: center;
 ` as typeof Pressable;
 
-export const PackInfo = styled.Text`
-  flex: 1;
-`;
+export const SearchInput = styled.TextInput.attrs({
+  placeholderTextColor: rgbaColor('blue', 0.5),
+  cursorColor: colors.blue,
+  selectionColor: rgbaColor('blue', 0.5),
+})`
+  margin-bottom: 24px;
+  padding: 8px 14px;
+
+  border-radius: 6px;
+  background-color: ${rgbaColor('secondaryBlue', 0.3)};
+` as typeof TextInput;
