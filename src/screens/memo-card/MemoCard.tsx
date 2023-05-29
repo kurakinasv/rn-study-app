@@ -1,13 +1,11 @@
 import React, { FC, memo, useCallback, useState } from 'react';
-import { Alert } from 'react-native';
+import { Alert, ToastAndroid } from 'react-native';
 
 import { Stack, useRouter } from 'expo-router';
 
 import FloatButton from '@components/FloatButton/FloatButton';
-import { PageView } from '@styles/components';
+import { Input, InputLabel, InputView, PageView } from '@styles/components';
 import { UniqueId } from '@typings/common';
-
-import { StyledInput } from './MemoCard.styles';
 
 type Props = {
   loading: boolean;
@@ -38,6 +36,11 @@ const MemoCard: FC<Props> = ({
       return;
     }
 
+    if (!cardInfo.question || !cardInfo.answer) {
+      ToastAndroid.show('Заполните все поля', ToastAndroid.CENTER);
+      return;
+    }
+
     await cardAction(cardInfo.question, cardInfo.answer);
 
     Alert.alert(alertMessage, '', [
@@ -59,23 +62,32 @@ const MemoCard: FC<Props> = ({
     <PageView>
       <Stack.Screen options={{ headerTitle: pageTitle }} />
 
-      <StyledInput
-        editable={!loading}
-        inputMode="text"
-        onChangeText={handleInput('question')}
-        value={cardInfo.question}
-        placeholder="Вопрос"
-      />
+      <InputView>
+        <InputLabel>Вопрос</InputLabel>
+        <Input
+          editable={!loading}
+          inputMode="text"
+          onChangeText={handleInput('question')}
+          value={cardInfo.question}
+        />
+      </InputView>
 
-      <StyledInput
-        editable={!loading}
-        inputMode="text"
-        onChangeText={handleInput('answer')}
-        value={cardInfo.answer}
-        placeholder="Ответ"
-      />
+      <InputView>
+        <InputLabel>Ответ</InputLabel>
+        <Input
+          editable={!loading}
+          inputMode="text"
+          onChangeText={handleInput('answer')}
+          value={cardInfo.answer}
+        />
+      </InputView>
 
-      <FloatButton icon="check" onPressAction={handleAction} disabled={loading} loading={loading} />
+      <FloatButton
+        icon="check"
+        onPressAction={handleAction}
+        disabled={loading || !cardInfo.question || !cardInfo.answer}
+        loading={loading}
+      />
     </PageView>
   );
 };

@@ -1,4 +1,4 @@
-import { View, ActivityIndicator, Text, Pressable, FlatList } from 'react-native';
+import { View, ActivityIndicator, Text, TextInput, Pressable, FlatList } from 'react-native';
 
 import styled from 'styled-components/native';
 
@@ -40,7 +40,7 @@ export const CardsList = styled.FlatList`
 export const CardContainer = styled.Pressable`
   flex-direction: row;
 
-  padding: 12px;
+  padding: 14px;
   margin: 0 10px 10px 10px;
 
   background-color: ${colors.lightGray};
@@ -63,3 +63,28 @@ export const CardTitle = styled.Text`
 export const CardInfo = styled.Text`
   ${additionalText()};
 ` as typeof Text;
+
+export const SectionTitle = styled.Text`
+  ${header(3)};
+  margin-bottom: 20px;
+` as typeof Text;
+
+export const InputView = styled.View`
+  margin-bottom: 20px;
+` as typeof View;
+
+export const InputLabel = styled.Text`
+  ${header(3)};
+  margin-bottom: 8px;
+` as typeof Text;
+
+export const Input = styled.TextInput.attrs({
+  placeholderTextColor: rgbaColor('blue', 0.5),
+  cursorColor: colors.blue,
+  selectionColor: rgbaColor('blue', 0.5),
+})`
+  padding: 12px 10px;
+
+  border-radius: 6px;
+  background-color: ${rgbaColor('secondaryBlue', 0.3)};
+` as typeof TextInput;

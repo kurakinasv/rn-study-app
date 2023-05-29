@@ -7,6 +7,7 @@ import { api, endpoints } from '@config/api';
 import { ILocalStore } from '@hooks/useLocalStore';
 import { CreateCardType, EditCardType, MemoCardModel } from '@stores/models/memo';
 import { rootStore } from '@stores/RootStore/context';
+import { UniqueId } from '@typings/common';
 
 class MemoCardStore implements ILocalStore {
   card: MemoCardModel | null = null;
@@ -40,6 +41,7 @@ class MemoCardStore implements ILocalStore {
       const res = await api.post(endpoints.createMemoCard, body);
 
       if (res.data) {
+        await rootStore.memoStore.getMemoPacks();
         await rootStore.memoStore.getCardsByPackId(memoPackId);
       }
     } catch (error) {
@@ -74,6 +76,24 @@ class MemoCardStore implements ILocalStore {
     } catch (error) {
       if (isAxiosError(error)) {
         Alert.alert('editCard Error', error.response?.data.message);
+      } else if (error instanceof Error) {
+        Alert.alert('Unknown error', error.message);
+      }
+    }
+
+    this.setLoading(false);
+  };
+
+  deleteCard = async (toDeleteId: UniqueId, packId: UniqueId) => {
+    this.setLoading(true);
+
+    try {
+      await api.delete(endpoints.deleteMemoCard + toDeleteId);
+      await rootStore.memoStore.getMemoPacks();
+      await rootStore.memoStore.getCardsByPackId(packId);
+    } catch (error) {
+      if (isAxiosError(error)) {
+        Alert.alert('Error', error.response?.data.message);
       } else if (error instanceof Error) {
         Alert.alert('Unknown error', error.message);
       }

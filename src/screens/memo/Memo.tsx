@@ -10,6 +10,7 @@ import { MemoPackModel } from '@stores/models/memo';
 import { useMemoStore } from '@stores/RootStore/hooks';
 import { colors } from '@styles/colors';
 import { CardInfo, CardTitle, CardView, CardsList, PageLoader, PageView } from '@styles/components';
+import localizeCardAmount from '@utils/localizeCardAmount';
 
 import { MemoPackContainer, SearchInput } from './Memo.styles';
 
@@ -20,20 +21,10 @@ const Memo = () => {
 
   useEffect(() => {
     getMemoPacks();
-  }, []);
+  }, [memoPacks.length]);
 
   const goToCreatePack = useCallback(() => {
     router.push(routes.createMemoPack);
-  }, []);
-
-  const localizeCardAmount = useCallback((size: number) => {
-    if (size === 1) {
-      return 'карточка';
-    }
-    if (size === 2 || size === 3 || size === 4) {
-      return 'карточки';
-    }
-    return 'карточек';
   }, []);
 
   const [searchQuery, setSearchQuery] = useState('');

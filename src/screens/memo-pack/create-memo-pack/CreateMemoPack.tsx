@@ -1,14 +1,12 @@
 import { useState } from 'react';
-import { Alert } from 'react-native';
+import { Alert, ToastAndroid } from 'react-native';
 
 import { useRouter } from 'expo-router';
 import { observer } from 'mobx-react';
 
 import FloatButton from '@components/FloatButton';
 import { useMemoStore } from '@stores/RootStore/hooks';
-import { PageView } from '@styles/components';
-
-import { StyledInput } from './CreateMemoPack.styles';
+import { Input, InputLabel, InputView, PageView } from '@styles/components';
 
 const CreateMemoPack = () => {
   const router = useRouter();
@@ -17,6 +15,11 @@ const CreateMemoPack = () => {
   const [name, setName] = useState('');
 
   const handleCreate = async () => {
+    if (!name) {
+      ToastAndroid.show('Заполните все поля', ToastAndroid.CENTER);
+      return;
+    }
+
     await createMemoPack({ name });
 
     Alert.alert('Набор карточек создан', '', [
@@ -33,14 +36,17 @@ const CreateMemoPack = () => {
 
   return (
     <PageView>
-      <StyledInput
-        editable={!loading}
-        inputMode="text"
-        onChangeText={handleNameInput}
-        value={name}
-      />
+      <InputView>
+        <InputLabel>Название</InputLabel>
+        <Input editable={!loading} inputMode="text" onChangeText={handleNameInput} value={name} />
+      </InputView>
 
-      <FloatButton icon="check" onPressAction={handleCreate} disabled={loading} loading={loading} />
+      <FloatButton
+        icon="check"
+        onPressAction={handleCreate}
+        disabled={loading || !name}
+        loading={loading}
+      />
     </PageView>
   );
 };

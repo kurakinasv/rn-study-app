@@ -18,17 +18,11 @@ export const CardCounter = styled.Text`
   padding: 0 14px;
 ` as typeof Text;
 
-export const CardStateIndicator = styled_(Text)<{ color: string }>`
-  width: 50px;
-  height: 10px;
-
+export const IndicatorWrapper = styled.View`
   position: absolute;
   top: 16px;
   left: 16px;
-
-  border-radius: 30px;
-  background-color: ${({ color }) => color};
-`;
+` as typeof View;
 
 export const CardWrapper = styled.Pressable`
   position: relative;

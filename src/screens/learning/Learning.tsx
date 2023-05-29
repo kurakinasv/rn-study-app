@@ -1,12 +1,13 @@
-import { useState, useCallback, useMemo } from 'react';
+import { useState, useCallback } from 'react';
 import { Pressable } from 'react-native';
 
 import { MaterialIcons, Feather, AntDesign } from '@expo/vector-icons';
 import { Stack } from 'expo-router';
 import { observer } from 'mobx-react';
 
+import MemoCardStateIndicator from '@components/MemoCardStateIndicator';
 import { useLocalStore } from '@hooks/useLocalStore';
-import MemoCardStore from '@stores/MemoCardStore/MemoCardStore';
+import MemoCardStore from '@stores/MemoCardStore';
 import { MemoCardState } from '@stores/models/memo';
 import { useMemoStore } from '@stores/RootStore/hooks';
 import { colors } from '@styles/colors';
@@ -14,9 +15,9 @@ import { colors } from '@styles/colors';
 import {
   ButtonsWrapper,
   CardCounter,
-  CardStateIndicator,
   CardText,
   CardWrapper,
+  IndicatorWrapper,
   StyledButton,
   StyledPageView,
 } from './Learning.styles';
@@ -60,29 +61,6 @@ const Learning = () => {
     await editCard({ cardId: _id, state, memoPackId: currentPack._id });
   };
 
-  const stateColor = useMemo(() => {
-    const { state } = cardsFromCurrentPack[currentCardIndex];
-
-    let color = '';
-
-    switch (state) {
-      case 'easy':
-        color = colors.green;
-        break;
-      case 'normal':
-        color = colors.blue;
-        break;
-      case 'difficult':
-        color = colors.red;
-        break;
-      default:
-        color = colors.white;
-        break;
-    }
-
-    return color;
-  }, [currentCardIndex, cardsFromCurrentPack]);
-
   return (
     <StyledPageView>
       <Stack.Screen
@@ -97,7 +75,9 @@ const Learning = () => {
       />
 
       <CardWrapper onPress={toggleCardPosition}>
-        <CardStateIndicator color={stateColor} />
+        <IndicatorWrapper>
+          <MemoCardStateIndicator state={cardsFromCurrentPack[currentCardIndex].state} />
+        </IndicatorWrapper>
 
         {cardPosition === 'front' && (
           <CardText>{cardsFromCurrentPack[currentCardIndex].question}</CardText>

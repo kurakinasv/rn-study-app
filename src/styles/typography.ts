@@ -39,3 +39,12 @@ export const regularText = (color = colors.black) => {
     color: ${color};
   `;
 };
+
+export const elementText = (color = colors.white) => {
+  return css`
+    font-family: ${fontFamilies.MontserratSemiBold};
+    font-size: 20px;
+    text-align: center;
+    color: ${color};
+  `;
+};
