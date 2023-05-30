@@ -4,8 +4,9 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { isAxiosError } from 'axios';
 import { makeAutoObservable } from 'mobx';
 
-import { apiPublic, endpoints } from '@config/api';
+import { api, apiPublic, endpoints } from '@config/api';
 import { userStorageName } from '@config/storage';
+import { UserApi, UserModel } from '@stores/models/user';
 import RootStore from '@stores/RootStore';
 
 class AuthStore {
@@ -14,6 +15,8 @@ class AuthStore {
   userId = '';
   token = '';
   isAuth = false;
+  loading = false;
+  user: UserModel | null = null;
 
   constructor(root: RootStore) {
     makeAutoObservable<this, 'root'>(this);
@@ -28,7 +31,17 @@ class AuthStore {
     this.isAuth = state;
   };
 
+  setLoading = (state: boolean) => {
+    this.loading = state;
+  };
+
+  setUser = (user: UserModel) => {
+    this.user = user;
+  };
+
   init = async () => {
+    this.setLoading(true);
+
     try {
       const userJSON = await AsyncStorage.getItem(userStorageName);
       const user = userJSON ? JSON.parse(userJSON) : null;
@@ -41,6 +54,8 @@ class AuthStore {
         console.log('Init error', error.message);
       }
     }
+
+    this.setLoading(false);
   };
 
   authenticate = async (token: string, userId: string) => {
@@ -53,6 +68,8 @@ class AuthStore {
 
   login = async (email: string, password: string) => {
     const body = { email, password };
+
+    this.setLoading(true);
 
     try {
       const res = await apiPublic.post(endpoints.login, body);
@@ -70,10 +87,13 @@ class AuthStore {
         Alert.alert('Unknown error', error.message);
       }
     }
+    this.setLoading(false);
   };
 
   register = async (email: string, password: string) => {
     const body = { email, password };
+
+    this.setLoading(true);
 
     try {
       const res = await apiPublic.post(endpoints.register, body);
@@ -90,13 +110,59 @@ class AuthStore {
         Alert.alert('Unknown error', error.message);
       }
     }
+
+    this.setLoading(false);
+  };
+
+  getUser = async () => {
+    this.setLoading(true);
+
+    try {
+      const res = await api.get<UserApi>(endpoints.user);
+
+      if (res.data) {
+        const { email, username } = res.data;
+        this.setUser({ email, username });
+        this.setLoading(false);
+        return { email, username };
+      }
+    } catch (error) {
+      if (isAxiosError(error)) {
+        Alert.alert('Error', error.response?.data.message);
+      } else if (error instanceof Error) {
+        Alert.alert('Unknown error', error.message);
+      }
+      this.setLoading(false);
+    }
+  };
+
+  editUser = async (username: string) => {
+    this.setLoading(true);
+
+    try {
+      const res = await api.post(endpoints.editUser, { username: username.trim() });
+
+      if (res.data && this.user) {
+        this.setUser({ ...this.user, username: res.data.username });
+      }
+    } catch (error) {
+      if (isAxiosError(error)) {
+        Alert.alert('Error', error.response?.data.message);
+      } else if (error instanceof Error) {
+        Alert.alert('Unknown error', error.message);
+      }
+    }
+
+    this.setLoading(false);
   };
 
   logout = async () => {
+    this.setLoading(true);
     await AsyncStorage.removeItem(userStorageName);
     this.setIsAuth(false);
     this.setToken('');
     this.userId = '';
+    this.setLoading(false);
   };
 }
 

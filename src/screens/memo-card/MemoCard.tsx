@@ -66,6 +66,7 @@ const MemoCard: FC<Props> = ({
         <InputLabel>Вопрос</InputLabel>
         <Input
           editable={!loading}
+          multiline
           inputMode="text"
           onChangeText={handleInput('question')}
           value={cardInfo.question}
@@ -76,6 +77,7 @@ const MemoCard: FC<Props> = ({
         <InputLabel>Ответ</InputLabel>
         <Input
           editable={!loading}
+          multiline
           inputMode="text"
           onChangeText={handleInput('answer')}
           value={cardInfo.answer}

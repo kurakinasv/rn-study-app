@@ -29,6 +29,8 @@ api.interceptors.request.use(async (config) => {
 export const endpoints = {
   login: '/auth/login',
   register: '/auth/register',
+  user: '/auth/user',
+  editUser: '/auth/editUser',
 
   getNotes: '/note/notes',
   createNote: '/note/createNote',
