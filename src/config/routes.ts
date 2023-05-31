@@ -10,6 +10,7 @@ export const routes = {
 
   memoPack: (packId: UniqueId) => `/memoPacks/${packId}`,
   learning: (packId: UniqueId) => `/memoPacks/${packId}/learning`,
+  practice: (packId: UniqueId) => `/memoPacks/${packId}/practice`,
   card: (packId: UniqueId, cardId: UniqueId) => `/memoPacks/${packId}/cards/${cardId}`,
   createMemoCard: `/memoPacks/createMemoCard`,
 

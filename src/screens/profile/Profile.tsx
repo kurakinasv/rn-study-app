@@ -5,7 +5,7 @@ import { useRouter } from 'expo-router';
 import { observer } from 'mobx-react';
 
 import FloatButton from '@components/FloatButton/FloatButton';
-import { useAuthStore } from '@stores/RootStore/hooks';
+import { useAuthStore, useNotificationStore } from '@stores/RootStore/hooks';
 import {
   Button,
   ButtonText,
@@ -19,8 +19,10 @@ import {
 import { FloatButtonWrapper, FormView } from './Profile.styles';
 
 const Profile = () => {
-  const { logout, loading, getUser, user, editUser } = useAuthStore();
   const router = useRouter();
+
+  const { logout, loading, getUser, user, editUser } = useAuthStore();
+  const { cancelAllNotifications } = useNotificationStore();
 
   const [userInfo, setUserInfo] = useState({
     email: '',
@@ -39,6 +41,7 @@ const Profile = () => {
   }, []);
 
   const handleLogout = useCallback(async () => {
+    await cancelAllNotifications();
     await logout();
     router.replace('auth');
     ToastAndroid.show('Выполнен выход из системы', ToastAndroid.SHORT);
