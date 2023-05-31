@@ -18,7 +18,7 @@ export default () => (
     >
       <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
       <Stack.Screen name="memoPacks" options={{ headerShown: false }} />
-      <Stack.Screen name="auth" options={{ headerTitle: 'Authentication' }} />
+      <Stack.Screen name="auth" options={{ headerTitle: 'Авторизация' }} />
     </Stack>
   </>
 );

@@ -5,9 +5,16 @@ import { useRouter } from 'expo-router';
 import { observer } from 'mobx-react';
 
 import FloatButton from '@components/FloatButton/FloatButton';
-import { Button, ButtonText } from '@screens/memo-pack/MemoPack.styles';
 import { useAuthStore } from '@stores/RootStore/hooks';
-import { Input, InputLabel, InputView, PageLoader, PageView } from '@styles/components';
+import {
+  Button,
+  ButtonText,
+  Input,
+  InputLabel,
+  InputView,
+  PageLoader,
+  PageView,
+} from '@styles/components';
 
 import { FloatButtonWrapper, FormView } from './Profile.styles';
 
@@ -80,7 +87,7 @@ const Profile = () => {
         </FormView>
 
         <Button onPress={handleLogout}>
-          <ButtonText>Logout</ButtonText>
+          <ButtonText>Выйти</ButtonText>
         </Button>
 
         {displayButton && (

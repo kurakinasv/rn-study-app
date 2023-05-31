@@ -1,80 +1,145 @@
 import { useState, useEffect } from 'react';
-import {
-  SafeAreaView,
-  Text,
-  Pressable,
-  TextInput,
-  Alert,
-  ActivityIndicator,
-  ToastAndroid,
-} from 'react-native';
+import { Text, ToastAndroid } from 'react-native';
 
 import { Redirect } from 'expo-router';
 import { observer } from 'mobx-react';
+import { ScrollView } from 'react-native-gesture-handler';
 
 import { routes } from '@config/routes';
 import { useAuthStore } from '@stores/RootStore/hooks';
+import {
+  Button,
+  ButtonText,
+  Input,
+  InputLabel,
+  InputView,
+  PageLoader,
+  PageView,
+} from '@styles/components';
+
+import { Asterisk, ButtonWrapper, InfoText, LinkButton, LinkButtonText } from './Auth.styles';
 
 const Auth = () => {
-  const auth = useAuthStore();
+  const { isAuth, init, register, login, loading } = useAuthStore();
 
+  const [hasAccount, setHasAccount] = useState(false);
+
+  const [name, setName] = useState('');
   const [email, setEmail] = useState('sv11@gmail.com');
   const [password, setPassword] = useState('12345678');
-
-  const [loading, setLoading] = useState(false);
+  const [repeatedPassword, setRepeatedPassword] = useState('12345678');
 
   useEffect(() => {
-    auth.init();
+    init();
   }, []);
 
   const handleLogin = async () => {
-    setLoading(true);
-
-    if (email && password) {
-      await auth.login(email, password);
-      ToastAndroid.show('Авторизация выполнена', ToastAndroid.SHORT);
-    } else {
-      Alert.alert('Error', 'Заполните все поля');
+    if (!email || !password) {
+      ToastAndroid.show('Заполните все поля', ToastAndroid.SHORT);
+      return;
     }
-
-    setLoading(false);
+    const res = await login(email, password);
+    if (res) {
+      ToastAndroid.show('Авторизация выполнена', ToastAndroid.SHORT);
+    }
   };
 
   const handleRegister = async () => {
-    setLoading(true);
-
-    if (email && password) {
-      await auth.register(email, password);
-      ToastAndroid.show('Авторизация выполнена', ToastAndroid.SHORT);
-    } else {
-      Alert.alert('Error', 'Заполните все поля');
+    if (!email || !password || !repeatedPassword) {
+      ToastAndroid.show('Заполните все обязательные поля', ToastAndroid.SHORT);
+      return;
     }
-
-    setLoading(false);
+    if (password !== repeatedPassword) {
+      ToastAndroid.show('Пароли не совпадают', ToastAndroid.SHORT);
+      return;
+    }
+    const res = await register(email, password);
+    if (res) {
+      ToastAndroid.show('Авторизация выполнена', ToastAndroid.SHORT);
+    }
   };
 
-  if (auth.isAuth) {
-    return <Redirect href={routes.notes} />;
+  const toggleHasAccount = () => {
+    setHasAccount((has) => !has);
+  };
+
+  if (isAuth) {
+    return <Redirect href={routes.memo} />;
   }
 
   return (
-    <SafeAreaView>
-      <Text>You are not logged in</Text>
+    <>
+      {loading && <PageLoader size="large" />}
 
-      <TextInput value={email} onChangeText={setEmail} />
+      <ScrollView>
+        <PageView>
+          <InfoText>Чтобы начать пользоваться приложением, необходимо войти в систему</InfoText>
 
-      <TextInput value={password} onChangeText={setPassword} />
+          {!hasAccount && (
+            <InputView>
+              <InputLabel>Имя</InputLabel>
+              <Input value={name} onChangeText={setName} editable={!loading} inputMode="text" />
+            </InputView>
+          )}
 
-      <Pressable onPress={handleLogin} disabled={loading}>
-        <Text>Click to log in</Text>
-      </Pressable>
+          <InputView>
+            <InputLabel>
+              <Text>Email</Text>
+              <Asterisk>*</Asterisk>
+            </InputLabel>
+            <Input value={email} onChangeText={setEmail} editable={!loading} inputMode="email" />
+          </InputView>
 
-      <Pressable onPress={handleRegister} disabled={loading}>
-        <Text>Or here to register</Text>
-      </Pressable>
+          <InputView>
+            <InputLabel>
+              <Text>Пароль</Text>
+              <Asterisk>*</Asterisk>
+            </InputLabel>
+            <Input
+              value={password}
+              onChangeText={setPassword}
+              editable={!loading}
+              secureTextEntry={true}
+            />
+          </InputView>
 
-      <ActivityIndicator size="large" animating={loading} />
-    </SafeAreaView>
+          {!hasAccount && (
+            <InputView>
+              <InputLabel>
+                <Text>Повторите пароль</Text>
+                <Asterisk>*</Asterisk>
+              </InputLabel>
+              <Input
+                value={repeatedPassword}
+                onChangeText={setRepeatedPassword}
+                editable={!loading}
+                secureTextEntry={true}
+              />
+            </InputView>
+          )}
+
+          <ButtonWrapper>
+            {hasAccount && (
+              <Button onPress={handleLogin} disabled={loading}>
+                <ButtonText>Войти</ButtonText>
+              </Button>
+            )}
+
+            {!hasAccount && (
+              <Button onPress={handleRegister} disabled={loading}>
+                <ButtonText>Зарегистрироваться</ButtonText>
+              </Button>
+            )}
+          </ButtonWrapper>
+
+          <LinkButton onPress={toggleHasAccount} disabled={loading}>
+            <LinkButtonText>
+              {hasAccount ? 'Нет аккаунта?' : 'Уже зарегистрированы?'}
+            </LinkButtonText>
+          </LinkButton>
+        </PageView>
+      </ScrollView>
+    </>
   );
 };
 

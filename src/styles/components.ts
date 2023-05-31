@@ -4,7 +4,7 @@ import styled from 'styled-components/native';
 
 import { colors } from './colors';
 import { rgbaColor, shadow } from './mixins';
-import { additionalText, fontFamilies, header } from './typography';
+import { additionalText, elementText, fontFamilies, header } from './typography';
 
 export const PageView = styled.View`
   flex: 1;
@@ -88,3 +88,13 @@ export const Input = styled.TextInput.attrs({
   border-radius: 6px;
   background-color: ${rgbaColor('secondaryBlue', 0.3)};
 ` as typeof TextInput;
+
+export const Button = styled.Pressable`
+  padding: 14px 24px;
+  background-color: ${colors.blue};
+  border-radius: 6px;
+` as typeof Pressable;
+
+export const ButtonText = styled.Text`
+  ${elementText()}
+` as typeof Text;

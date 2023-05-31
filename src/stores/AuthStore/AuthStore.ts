@@ -77,6 +77,8 @@ class AuthStore {
       if (res.data) {
         const { userId, token } = res.data;
         await this.authenticate(token, userId);
+        this.setLoading(false);
+        return true;
       }
     } catch (error) {
       if (isAxiosError(error)) {
@@ -86,8 +88,8 @@ class AuthStore {
         // todo remove Alert
         Alert.alert('Unknown error', error.message);
       }
+      this.setLoading(false);
     }
-    this.setLoading(false);
   };
 
   register = async (email: string, password: string) => {
@@ -100,6 +102,8 @@ class AuthStore {
 
       if (res.data) {
         await this.login(email, password);
+        this.setLoading(false);
+        return true;
       }
     } catch (error) {
       if (isAxiosError(error)) {
@@ -109,9 +113,8 @@ class AuthStore {
         // todo remove Alert
         Alert.alert('Unknown error', error.message);
       }
+      this.setLoading(false);
     }
-
-    this.setLoading(false);
   };
 
   getUser = async () => {
