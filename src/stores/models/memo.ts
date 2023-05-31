@@ -5,6 +5,14 @@ export type MemoCardState = 'difficult' | 'normal' | 'easy' | 'new';
 export type CreateMemoType = Pick<MemoPackModel, 'name'> &
   Partial<Omit<MemoPackModel, '_id' | 'name'>>;
 
+export type EditMemoPackType = Partial<
+  Pick<MemoPackModel, 'name' | 'archived' | 'lastRepetition' | 'cards'>
+> & {
+  packId: UniqueId;
+  groupId?: UniqueId;
+  nextRepetition?: DateString | null;
+};
+
 export type CreateCardType = Pick<MemoCardModel, 'question' | 'answer'> &
   Partial<Pick<MemoCardModel, 'state' | 'createdAt'>> & { memoPackId: UniqueId };
 

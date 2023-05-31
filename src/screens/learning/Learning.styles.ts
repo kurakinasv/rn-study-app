@@ -14,7 +14,7 @@ export const StyledPageView = styled(PageView)`
 `;
 
 export const CardCounter = styled.Text`
-  ${header(3, colors.blue)}
+  ${header(3, colors.white)};
   padding: 0 14px;
 ` as typeof Text;
 

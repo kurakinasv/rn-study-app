@@ -2,6 +2,7 @@ import { useCallback } from 'react';
 import { SafeAreaView } from 'react-native';
 
 import { useFonts } from 'expo-font';
+import * as Notifications from 'expo-notifications';
 import { Redirect } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import styled from 'styled-components';
@@ -9,6 +10,15 @@ import styled from 'styled-components';
 import { routes } from '@config/routes';
 
 SplashScreen.preventAutoHideAsync();
+
+// enables notifications for the app
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: true,
+    shouldPlaySound: true,
+    shouldSetBadge: true,
+  }),
+});
 
 const SafeAreaContainer = styled(SafeAreaView)`
   flex: 1;

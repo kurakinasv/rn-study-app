@@ -27,6 +27,12 @@
     "web": {
       "favicon": "./src/assets/favicon.png",
       "bundler": "metro"
-    }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "7129a796-ae49-4ee0-8343-d2c20514db32"
+      }
+    },
+    "owner": "podcaster"
   }
 }

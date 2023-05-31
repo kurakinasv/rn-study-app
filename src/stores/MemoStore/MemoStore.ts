@@ -4,7 +4,12 @@ import { isAxiosError } from 'axios';
 import { makeAutoObservable } from 'mobx';
 
 import { api, endpoints } from '@config/api';
-import { CreateMemoType, MemoCardModel, MemoPackModel } from '@stores/models/memo';
+import {
+  CreateMemoType,
+  EditMemoPackType,
+  MemoCardModel,
+  MemoPackModel,
+} from '@stores/models/memo';
 import RootStore from '@stores/RootStore';
 import { UniqueId } from '@typings/common';
 
@@ -34,8 +39,8 @@ class MemoStore {
     this.loading = state;
   };
 
-  setMemoPacks = (notes: MemoPackModel[]) => {
-    this.memoPacks = notes;
+  setMemoPacks = (packs: MemoPackModel[]) => {
+    this.memoPacks = packs;
   };
 
   setTempCards = (cards: MemoCardModel[]) => {
@@ -135,9 +140,48 @@ class MemoStore {
     this.setLoading(false);
   };
 
-  // editMemoPack = ()=>{
+  editMemoPack = async ({
+    packId,
+    name,
+    lastRepetition,
+    nextRepetition,
+    archived,
+    cards,
+    groupId,
+  }: EditMemoPackType) => {
+    const body = {
+      packId,
+      name,
+      lastRepetition,
+      nextRepetition,
+      archived,
+      cards,
+      groupId,
+    };
 
-  // }
+    this.setLoading(true);
+
+    try {
+      // todo provide types
+      const res = await api.post(endpoints.editMemoPack, body);
+
+      if (res.data) {
+        await this.getMemoPacks();
+
+        if (this.currentPack?._id === packId) {
+          this.setCurrentPack(packId);
+        }
+      }
+    } catch (error) {
+      if (isAxiosError(error)) {
+        Alert.alert('Error', error.response?.data.message);
+      } else if (error instanceof Error) {
+        Alert.alert('Unknown error', error.message);
+      }
+    }
+
+    this.setLoading(false);
+  };
 
   deleteMemoPack = async (toDeleteId: UniqueId) => {
     this.setLoading(true);

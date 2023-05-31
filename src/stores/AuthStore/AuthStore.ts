@@ -161,7 +161,7 @@ class AuthStore {
 
   logout = async () => {
     this.setLoading(true);
-    await AsyncStorage.removeItem(userStorageName);
+    await AsyncStorage.clear();
     this.setIsAuth(false);
     this.setToken('');
     this.userId = '';
