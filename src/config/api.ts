@@ -46,4 +46,9 @@ export const endpoints = {
   createMemoCard: '/memoCard/createCard',
   editMemoCard: '/memoCard/editCard',
   deleteMemoCard: '/memoCard/deleteCard/',
+
+  getGroups: '/group/groups',
+  createGroup: '/group/createGroup',
+  editGroup: '/group/editGroup',
+  deleteGroup: '/group/deleteGroup/',
 };

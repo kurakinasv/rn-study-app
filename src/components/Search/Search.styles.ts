@@ -2,13 +2,8 @@ import { Pressable, TextInput } from 'react-native';
 
 import styled from 'styled-components/native';
 
-import { colors, rgb } from '@styles/colors';
-import { CardContainer } from '@styles/components';
+import { colors } from '@styles/colors';
 import { rgbaColor } from '@styles/mixins';
-
-export const MemoPackContainer = styled(CardContainer)`
-  align-items: center;
-` as typeof Pressable;
 
 export const SearchInput = styled.TextInput.attrs({
   placeholderTextColor: rgbaColor('blue', 0.5),

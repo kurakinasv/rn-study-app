@@ -8,6 +8,7 @@ export default () => {
   return (
     <Tabs
       screenOptions={{
+        tabBarHideOnKeyboard: true,
         tabBarActiveTintColor: colors.blue,
         tabBarIcon: ({ color }) => <AntDesign name="star" size={24} color={color} />,
         ...headerStyles,

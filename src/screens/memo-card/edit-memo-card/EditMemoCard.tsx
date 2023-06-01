@@ -54,7 +54,7 @@ const EditMemoCard = () => {
       }
       initialState={tempCardInfo}
       loading={loading}
-      pageTitle={packName}
+      pageTitle={`Карточка [${packName}]`}
       parentMemoPack={packId}
     />
   ) : null;

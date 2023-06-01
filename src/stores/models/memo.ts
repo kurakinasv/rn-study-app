@@ -9,7 +9,7 @@ export type EditMemoPackType = Partial<
   Pick<MemoPackModel, 'name' | 'archived' | 'lastRepetition' | 'cards'>
 > & {
   packId: UniqueId;
-  groupId?: UniqueId;
+  groupId?: UniqueId | null;
   nextRepetition?: DateString | null;
 };
 

@@ -1,18 +1,15 @@
 import React, { useCallback, useEffect, useState } from 'react';
 
-import { Feather } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { observer } from 'mobx-react';
 
 import FloatButton from '@components/FloatButton';
+import MemoPacksListItem from '@components/MemoPacksListItem';
+import Search from '@components/Search';
 import { routes } from '@config/routes';
 import { MemoPackModel } from '@stores/models/memo';
 import { useMemoStore } from '@stores/RootStore/hooks';
-import { colors } from '@styles/colors';
-import { CardInfo, CardTitle, CardView, CardsList, PageLoader, PageView } from '@styles/components';
-import localizeCardAmount from '@utils/localizeCardAmount';
-
-import { MemoPackContainer, SearchInput } from './Memo.styles';
+import { CardsList, PageLoader, PageView } from '@styles/components';
 
 const Memo = () => {
   const router = useRouter();
@@ -27,12 +24,10 @@ const Memo = () => {
     router.push(routes.createMemoPack);
   }, []);
 
-  const [searchQuery, setSearchQuery] = useState('');
   const [displayedPacks, setDisplayedPacks] = useState<MemoPackModel[] | null>(null);
 
   const search = useCallback(
     (text: string) => {
-      setSearchQuery(text);
       const filtered = memoPacks.filter(({ name }) => name.includes(text));
       setDisplayedPacks(filtered);
     },
@@ -44,30 +39,12 @@ const Memo = () => {
       {loading && <PageLoader />}
 
       <PageView>
-        <SearchInput
-          editable={!loading}
-          inputMode="search"
-          onChangeText={search}
-          value={searchQuery}
-          placeholder="Поиск по наборам"
-          blurOnSubmit={true}
-        />
+        <Search loading={loading} placeholder="Поиск по наборам" onInputText={search} />
 
         <CardsList
           data={displayedPacks ? displayedPacks : memoPacks}
           extraData={[memoPacks, displayedPacks]}
-          renderItem={({ item }) => (
-            <MemoPackContainer onPress={() => router.push(routes.memoPack(item._id))}>
-              <CardView>
-                <CardTitle>{item.name}</CardTitle>
-                <CardInfo>
-                  {item.cards.length} {localizeCardAmount(item.cards.length)}
-                </CardInfo>
-              </CardView>
-
-              <Feather name="chevron-right" size={32} color={colors.textGray} />
-            </MemoPackContainer>
-          )}
+          renderItem={({ item }) => <MemoPacksListItem pack={item} />}
         />
 
         <FloatButton icon="plus" onPressAction={goToCreatePack} disabled={loading} />

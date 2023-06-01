@@ -86,10 +86,10 @@ class NotesStore {
 
   editNote = async (
     noteId: UniqueId,
-    title: string,
-    content: string,
+    title?: string,
+    content?: string,
     nextRepetition?: Date,
-    group?: string
+    group?: string | null
   ) => {
     const body = {
       noteId,
@@ -97,13 +97,12 @@ class NotesStore {
       content,
       updatedAt: new Date(),
       nextRepetition,
-      group,
+      groupId: group,
     };
 
     this.setLoading(true);
 
     try {
-      // todo provide types
       const res = await api.post(endpoints.editNote, body);
 
       if (res.data) {
@@ -112,6 +111,7 @@ class NotesStore {
         newSet.splice(editedNote, 1, res.data);
 
         this.setNotes(newSet);
+        await this.root?.groupsStore.getGroups();
         this.setLoading(false);
       }
     } catch (error) {

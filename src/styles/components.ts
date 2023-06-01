@@ -28,7 +28,7 @@ export const PageLoader = styled.ActivityIndicator.attrs({
   width: 100%;
   height: 100%;
   background-color: ${rgbaColor('black', 0.1)};
-  z-index: 10;
+  z-index: 100;
   transform: scale(1.5);
 ` as typeof ActivityIndicator;
 
@@ -90,7 +90,7 @@ export const Input = styled.TextInput.attrs({
 ` as typeof TextInput;
 
 export const Button = styled.Pressable`
-  padding: 14px 24px;
+  padding: 14px 22px;
   background-color: ${colors.blue};
   border-radius: 6px;
 ` as typeof Pressable;

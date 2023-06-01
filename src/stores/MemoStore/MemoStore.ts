@@ -82,7 +82,6 @@ class MemoStore {
     this.setLoading(true);
 
     try {
-      // todo provide types
       const res = await api.get(endpoints.getMemoPacks);
 
       if (res.data) {
@@ -123,7 +122,6 @@ class MemoStore {
     this.setLoading(true);
 
     try {
-      // todo provide types
       const res = await api.post(endpoints.createMemoPack, body);
 
       if (res.data) {
@@ -162,11 +160,14 @@ class MemoStore {
     this.setLoading(true);
 
     try {
-      // todo provide types
       const res = await api.post(endpoints.editMemoPack, body);
 
       if (res.data) {
         await this.getMemoPacks();
+
+        if (groupId !== undefined) {
+          await this.root?.groupsStore.getGroups();
+        }
 
         if (this.currentPack?._id === packId) {
           this.setCurrentPack(packId);

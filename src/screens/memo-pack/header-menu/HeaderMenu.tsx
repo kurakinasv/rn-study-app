@@ -1,22 +1,23 @@
 import { FC, useState, useCallback, useEffect, memo } from 'react';
-import { Alert } from 'react-native';
+import { Alert, Vibration } from 'react-native';
 
 import { Entypo } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { Menu, MenuOption, MenuOptions, MenuTrigger } from 'react-native-popup-menu';
 
+import { useModal } from '@components/Modal';
+import PickGroupModal from '@components/Modal/PickGroupModal';
 import { routes } from '@config/routes';
 import {
   IntervalNotificationConfig,
   IntervalNotificationHours,
 } from '@stores/models/notifications';
-import { useMemoStore, useNotificationStore } from '@stores/RootStore/hooks';
+import { useGroupsStore, useMemoStore, useNotificationStore } from '@stores/RootStore/hooks';
 import { colors } from '@styles/colors';
+import { headerMenuStyles } from '@styles/shared';
 import { UniqueId } from '@typings/common';
 import { getDateAfterSomeHours } from '@utils/getDateAfterTime';
 import { getLastIntervalHours, saveLastIntervalHoursData } from '@utils/notificationsStorage';
-
-import { headerMenuStyles } from './HeaderMenu.styles';
 
 type Props = {
   packId: UniqueId;
@@ -104,32 +105,60 @@ const HeaderMenu: FC<Props> = ({ packId }) => {
     [packId]
   );
 
-  return (
-    <Menu>
-      <MenuTrigger customStyles={headerMenuStyles.trigger}>
-        <Entypo name="dots-three-vertical" size={22} color={colors.white} />
-      </MenuTrigger>
+  const { openModal, closeModal, modalVisible } = useModal();
+  const { groups, addGroupElement } = useGroupsStore();
 
-      <MenuOptions customStyles={headerMenuStyles.options}>
-        <MenuOption
-          text="Начать интервальное повторение"
-          onSelect={startNotificationRepeat}
-          customStyles={headerMenuStyles.option}
-          disabled={intervalStarted || !cardsFromCurrentPack.length}
-        />
-        <MenuOption
-          text="Закончить интервальное повторение"
-          onSelect={endNotificationRepeat}
-          customStyles={headerMenuStyles.option}
-          disabled={!intervalStarted}
-        />
-        <MenuOption
-          text="Удалить набор"
-          onSelect={handleDeletePack(packId)}
-          customStyles={headerMenuStyles.option}
-        />
-      </MenuOptions>
-    </Menu>
+  const open = () => {
+    Vibration.vibrate(100);
+    openModal();
+  };
+
+  const addToGroup = (packId: UniqueId) => async (groupId: UniqueId) => {
+    await addGroupElement({ groupId, packId });
+  };
+
+  return (
+    <>
+      <Menu>
+        <MenuTrigger customStyles={headerMenuStyles.trigger}>
+          <Entypo name="dots-three-vertical" size={22} color={colors.white} />
+        </MenuTrigger>
+
+        <MenuOptions customStyles={headerMenuStyles.options}>
+          <MenuOption
+            text="Начать интервальное повторение"
+            onSelect={startNotificationRepeat}
+            customStyles={headerMenuStyles.option}
+            disabled={intervalStarted || !cardsFromCurrentPack.length}
+          />
+          <MenuOption
+            text="Закончить интервальное повторение"
+            onSelect={endNotificationRepeat}
+            customStyles={headerMenuStyles.option}
+            disabled={!intervalStarted}
+          />
+          <MenuOption
+            text="Добавить в группу"
+            onSelect={open}
+            customStyles={headerMenuStyles.option}
+          />
+          <MenuOption
+            text="Удалить набор"
+            onSelect={handleDeletePack(packId)}
+            customStyles={headerMenuStyles.option}
+          />
+        </MenuOptions>
+      </Menu>
+
+      <PickGroupModal
+        targetId={packId}
+        targetGroupId={currentPack?.group || ''}
+        groups={groups}
+        onClose={closeModal}
+        visible={modalVisible}
+        onSave={addToGroup(packId)}
+      />
+    </>
   );
 };
 
