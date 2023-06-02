@@ -37,7 +37,6 @@ class MemoCardStore implements ILocalStore {
     this.setLoading(true);
 
     try {
-      // todo provide types
       const res = await api.post(endpoints.createMemoCard, body);
 
       if (res.data) {
@@ -46,9 +45,9 @@ class MemoCardStore implements ILocalStore {
       }
     } catch (error) {
       if (isAxiosError(error)) {
-        Alert.alert('createCard Error', error.response?.data.message);
+        Alert.alert('Ошибка', error.response?.data.message);
       } else if (error instanceof Error) {
-        Alert.alert('Unknown error', error.message);
+        Alert.alert('Неизвестная ошибка', error.message);
       }
     }
 
@@ -67,7 +66,6 @@ class MemoCardStore implements ILocalStore {
     this.setLoading(true);
 
     try {
-      // todo provide types
       const res = await api.post(endpoints.editMemoCard, body);
 
       if (res.data) {
@@ -75,9 +73,9 @@ class MemoCardStore implements ILocalStore {
       }
     } catch (error) {
       if (isAxiosError(error)) {
-        Alert.alert('editCard Error', error.response?.data.message);
+        Alert.alert('Ошибка', error.response?.data.message);
       } else if (error instanceof Error) {
-        Alert.alert('Unknown error', error.message);
+        Alert.alert('Неизвестная ошибка', error.message);
       }
     }
 
@@ -93,9 +91,9 @@ class MemoCardStore implements ILocalStore {
       await rootStore.memoStore.getCardsByPackId(packId);
     } catch (error) {
       if (isAxiosError(error)) {
-        Alert.alert('Error', error.response?.data.message);
+        Alert.alert('Ошибка', error.response?.data.message);
       } else if (error instanceof Error) {
-        Alert.alert('Unknown error', error.message);
+        Alert.alert('Неизвестная ошибка', error.message);
       }
     }
 

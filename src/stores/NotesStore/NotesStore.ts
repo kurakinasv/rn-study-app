@@ -35,7 +35,6 @@ class NotesStore {
     this.setLoading(true);
 
     try {
-      // todo provide types
       const res = await api.get(endpoints.getNotes);
 
       if (res.data) {
@@ -45,9 +44,9 @@ class NotesStore {
       }
     } catch (error) {
       if (isAxiosError(error)) {
-        Alert.alert('Error', error.response?.data.message);
+        Alert.alert('Ошибка', error.response?.data.message);
       } else if (error instanceof Error) {
-        Alert.alert('Unknown error', error.message);
+        Alert.alert('Неизвестная ошибка', error.message);
       }
 
       this.setLoading(false);
@@ -67,7 +66,6 @@ class NotesStore {
     this.setLoading(true);
 
     try {
-      // todo provide types
       const res = await api.post(endpoints.createNote, body);
 
       if (res.data) {
@@ -75,9 +73,9 @@ class NotesStore {
       }
     } catch (error) {
       if (isAxiosError(error)) {
-        Alert.alert('Error', error.response?.data.message);
+        Alert.alert('Ошибка', error.response?.data.message);
       } else if (error instanceof Error) {
-        Alert.alert('Unknown error', error.message);
+        Alert.alert('Неизвестная ошибка', error.message);
       }
     }
 
@@ -116,9 +114,9 @@ class NotesStore {
       }
     } catch (error) {
       if (isAxiosError(error)) {
-        Alert.alert('Error', error.response?.data.message);
+        Alert.alert('Ошибка', error.response?.data.message);
       } else if (error instanceof Error) {
-        Alert.alert('Unknown error', error.message);
+        Alert.alert('Неизвестная ошибка', error.message);
       }
 
       this.setLoading(false);
@@ -136,9 +134,9 @@ class NotesStore {
       this.setNotes(newSet);
     } catch (error) {
       if (isAxiosError(error)) {
-        Alert.alert('Error', error.response?.data.message);
+        Alert.alert('Ошибка', error.response?.data.message);
       } else if (error instanceof Error) {
-        Alert.alert('Unknown error', error.message);
+        Alert.alert('Неизвестная ошибка', error.message);
       }
     }
 

@@ -82,11 +82,9 @@ class AuthStore {
       }
     } catch (error) {
       if (isAxiosError(error)) {
-        // todo remove Alert
-        Alert.alert('Error', error.response?.data.message);
+        Alert.alert('Ошибка', error.response?.data.message);
       } else if (error instanceof Error) {
-        // todo remove Alert
-        Alert.alert('Unknown error', error.message);
+        Alert.alert('Неизвестная ошибка', error.message);
       }
       this.setLoading(false);
     }
@@ -107,11 +105,9 @@ class AuthStore {
       }
     } catch (error) {
       if (isAxiosError(error)) {
-        // todo remove Alert
-        Alert.alert('Error', error.response?.data.message);
+        Alert.alert('Ошибка', error.response?.data.message);
       } else if (error instanceof Error) {
-        // todo remove Alert
-        Alert.alert('Unknown error', error.message);
+        Alert.alert('Неизвестная ошибка', error.message);
       }
       this.setLoading(false);
     }
@@ -131,9 +127,9 @@ class AuthStore {
       }
     } catch (error) {
       if (isAxiosError(error)) {
-        Alert.alert('Error', error.response?.data.message);
+        Alert.alert('Ошибка', error.response?.data.message);
       } else if (error instanceof Error) {
-        Alert.alert('Unknown error', error.message);
+        Alert.alert('Неизвестная ошибка', error.message);
       }
       this.setLoading(false);
     }
@@ -150,9 +146,9 @@ class AuthStore {
       }
     } catch (error) {
       if (isAxiosError(error)) {
-        Alert.alert('Error', error.response?.data.message);
+        Alert.alert('Ошибка', error.response?.data.message);
       } else if (error instanceof Error) {
-        Alert.alert('Unknown error', error.message);
+        Alert.alert('Неизвестная ошибка', error.message);
       }
     }
 

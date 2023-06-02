@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Text, ToastAndroid } from 'react-native';
+import { Text, ToastAndroid, Vibration } from 'react-native';
 
 import { Redirect } from 'expo-router';
 import { observer } from 'mobx-react';
@@ -34,6 +34,8 @@ const Auth = () => {
   }, []);
 
   const handleLogin = async () => {
+    Vibration.vibrate(100);
+
     if (!email || !password) {
       ToastAndroid.show('Заполните все поля', ToastAndroid.SHORT);
       return;
@@ -45,6 +47,8 @@ const Auth = () => {
   };
 
   const handleRegister = async () => {
+    Vibration.vibrate(100);
+
     if (!email || !password || !repeatedPassword) {
       ToastAndroid.show('Заполните все обязательные поля', ToastAndroid.SHORT);
       return;
@@ -64,7 +68,7 @@ const Auth = () => {
   };
 
   if (isAuth) {
-    return <Redirect href={routes.memo} />;
+    return <Redirect href={routes.notes} />;
   }
 
   return (
