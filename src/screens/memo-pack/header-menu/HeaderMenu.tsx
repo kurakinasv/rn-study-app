@@ -48,9 +48,12 @@ const HeaderMenu: FC<Props> = ({ packId }) => {
   }, []);
 
   const startNotificationRepeat = useCallback(async () => {
+    Vibration.vibrate(100);
+
     if (typeof packId !== 'string') {
       return;
     }
+
     setIntervalStarted(true);
 
     const { hours, title, type, body } =
@@ -70,6 +73,8 @@ const HeaderMenu: FC<Props> = ({ packId }) => {
   }, [packId]);
 
   const endNotificationRepeat = useCallback(async () => {
+    Vibration.vibrate(100);
+
     if (typeof packId !== 'string') {
       return;
     }
@@ -83,6 +88,8 @@ const HeaderMenu: FC<Props> = ({ packId }) => {
 
   const handleDeletePack = useCallback(
     (id: UniqueId) => () => {
+      Vibration.vibrate(100);
+
       Alert.alert(
         'Удалить набор?',
         'Также будут удалены все карточки, которые в нём находятся',
@@ -91,6 +98,7 @@ const HeaderMenu: FC<Props> = ({ packId }) => {
           {
             text: 'Да',
             onPress: async () => {
+              Vibration.vibrate(100);
               await cancelMemoPackNotifications(packId);
               await saveLastIntervalHoursData(packId, null);
               await deleteMemoPack(id);
@@ -114,6 +122,7 @@ const HeaderMenu: FC<Props> = ({ packId }) => {
   };
 
   const addToGroup = (packId: UniqueId) => async (groupId: UniqueId) => {
+    Vibration.vibrate(100);
     await addGroupElement({ groupId, packId });
   };
 

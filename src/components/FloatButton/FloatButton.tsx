@@ -1,5 +1,5 @@
 import { FC, memo } from 'react';
-import { PressableProps, ActivityIndicator } from 'react-native';
+import { PressableProps, ActivityIndicator, GestureResponderEvent, Vibration } from 'react-native';
 
 import { Feather } from '@expo/vector-icons';
 
@@ -8,7 +8,7 @@ import { colors } from '@styles/colors';
 import { ButtonWrapper } from './FloatButton.styles';
 
 type FloatButtonProps = PressableProps & {
-  onPressAction: () => void;
+  onPressAction: (event: GestureResponderEvent) => void;
   icon: 'plus' | 'check' | JSX.Element;
   disabled?: boolean;
   loading?: boolean;
@@ -27,8 +27,13 @@ const FloatButton: FC<FloatButtonProps> = ({
       icon
     );
 
+  const handlePress = (event: GestureResponderEvent) => {
+    onPressAction(event);
+    Vibration.vibrate(100);
+  };
+
   return (
-    <ButtonWrapper onPress={onPressAction} disabled={disabled}>
+    <ButtonWrapper onPress={handlePress} disabled={disabled}>
       {loading ? <ActivityIndicator size="small" color={colors.white} /> : innerIcon}
     </ButtonWrapper>
   );

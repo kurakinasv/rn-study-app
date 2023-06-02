@@ -18,4 +18,7 @@ export const ButtonWrapper = styled(Pressable)`
 
   background-color: ${({ disabled }) => (disabled ? rgbaColor('blue', 0.7) : colors.blue)};
   border-radius: 25px;
+
+  shadow-color: ${rgbaColor('black', 0.3)};
+  elevation: 7;
 `;

@@ -45,12 +45,21 @@ const NotesListItem = ({ note, editMode, onCheck, onDeleteNote }: Props) => {
   };
 
   const handleDelete = useCallback(() => {
+    Vibration.vibrate(100);
+
     Alert.alert(
       'Удалить заметку?',
       'Зметка будет удалена без возможности восстановления',
       [
         { text: 'Нет', style: 'cancel' },
-        { text: 'Да', onPress: onDeleteNote, style: 'destructive' },
+        {
+          text: 'Да',
+          onPress: () => {
+            Vibration.vibrate(100);
+            onDeleteNote();
+          },
+          style: 'destructive',
+        },
       ],
       { cancelable: true }
     );
@@ -100,7 +109,7 @@ const NotesListItem = ({ note, editMode, onCheck, onDeleteNote }: Props) => {
         )}
 
         {editMode !== EditMode.EDIT && (
-          <Menu>
+          <Menu onOpen={() => Vibration.vibrate(100)}>
             <MenuTrigger customStyles={menuStyles.trigger}>
               <Entypo name="dots-three-vertical" size={18} color={colors.textGray} />
             </MenuTrigger>

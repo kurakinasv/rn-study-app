@@ -1,5 +1,5 @@
 import { useCallback, useState, useEffect, useMemo } from 'react';
-import { ToastAndroid } from 'react-native';
+import { ToastAndroid, Vibration, Alert } from 'react-native';
 
 import { useRouter } from 'expo-router';
 import { observer } from 'mobx-react';
@@ -41,10 +41,29 @@ const Profile = () => {
   }, []);
 
   const handleLogout = useCallback(async () => {
+    Vibration.vibrate(100);
     await cancelAllNotifications();
     await logout();
     router.replace('auth');
     ToastAndroid.show('Выполнен выход из системы', ToastAndroid.SHORT);
+  }, []);
+
+  const askForLogout = useCallback(() => {
+    Vibration.vibrate(100);
+
+    Alert.alert('Вы действительно хотите выйти?', 'Все уведомления о занятиях будут остановлены', [
+      {
+        text: 'Нет',
+        style: 'cancel',
+      },
+      {
+        text: 'Да',
+        onPress: async () => {
+          await handleLogout();
+        },
+        style: 'destructive',
+      },
+    ]);
   }, []);
 
   const handleInput = useCallback((text: string) => {
@@ -90,7 +109,7 @@ const Profile = () => {
             </InputView>
           </FormView>
 
-          <Button onPress={handleLogout}>
+          <Button onPress={askForLogout}>
             <ButtonText>Выйти</ButtonText>
           </Button>
         </StyledScrollView>

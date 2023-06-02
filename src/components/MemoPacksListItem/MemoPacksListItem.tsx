@@ -1,4 +1,5 @@
-import { useState, memo } from 'react';
+import { useState, memo, useCallback } from 'react';
+import { Vibration } from 'react-native';
 
 import { Feather } from '@expo/vector-icons';
 import { Checkbox } from 'expo-checkbox';
@@ -9,6 +10,7 @@ import { EditMode } from '@stores/models/group';
 import { MemoPackModel } from '@stores/models/memo';
 import { colors } from '@styles/colors';
 import { CardInfo, CardTitle, CardView } from '@styles/components';
+import { UniqueId } from '@typings/common';
 import localizeCardAmount from '@utils/localizeCardAmount';
 
 import { MemoPackContainer } from './MemoPacksListItem.styles';
@@ -31,11 +33,16 @@ const MemoPacksListItem = ({ pack, editMode, onCheck }: Props) => {
     }
   };
 
+  const goToMemoPack = useCallback(
+    (id: UniqueId) => () => {
+      Vibration.vibrate(100);
+      router.push(routes.memoPack(id));
+    },
+    []
+  );
+
   return (
-    <MemoPackContainer
-      onPress={() => router.push(routes.memoPack(pack._id))}
-      disabled={editMode === EditMode.EDIT}
-    >
+    <MemoPackContainer onPress={goToMemoPack(pack._id)} disabled={editMode === EditMode.EDIT}>
       <CardView>
         <CardTitle>{pack.name}</CardTitle>
         <CardInfo>

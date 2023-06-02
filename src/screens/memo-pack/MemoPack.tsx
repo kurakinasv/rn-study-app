@@ -1,5 +1,5 @@
 import { useEffect, useCallback } from 'react';
-import { Alert } from 'react-native';
+import { Alert, Vibration } from 'react-native';
 
 import { Entypo } from '@expo/vector-icons';
 import { Stack, useRouter, useSearchParams } from 'expo-router';
@@ -66,17 +66,36 @@ const MemoPack = () => {
     router.push({ pathname: routes.createMemoCard, params: { packId } });
   }, [packId]);
 
+  const goToCard = useCallback(
+    (id: UniqueId) => () => {
+      if (typeof packId !== 'string') {
+        return;
+      }
+      Vibration.vibrate(100);
+      router.push(routes.card(packId, id));
+    },
+    [packId]
+  );
+
   if (!currentPack || typeof packId !== 'string') {
     return null;
   }
 
   const handleDeleteCard = (id: UniqueId) => () => {
+    Vibration.vibrate(100);
     Alert.alert(
       'Удалить карточку?',
       'Это действие нельзя будет отменить',
       [
         { text: 'Нет', style: 'cancel' },
-        { text: 'Да', onPress: () => deleteCard(id, packId), style: 'destructive' },
+        {
+          text: 'Да',
+          onPress: () => {
+            Vibration.vibrate(100);
+            deleteCard(id, packId);
+          },
+          style: 'destructive',
+        },
       ],
       { cancelable: true }
     );
@@ -146,37 +165,35 @@ const MemoPack = () => {
         <CardsAmount>{currentPack.cards.length}</CardsAmount>
       </CardsTitleView>
 
-      {!!cardsFromCurrentPack.length && (
-        <CardsList
-          data={cardsFromCurrentPack}
-          extraData={cardsFromCurrentPack}
-          ListEmptyComponent={<Placeholder />}
-          renderItem={({ item }) => (
-            <CardContainer onPress={() => router.push(routes.card(packId, item._id))}>
-              <CardContent>
-                <MemoCardStateIndicator state={item.state} />
-                <Question>{item.question}</Question>
-                <Divider />
-                <Answer>{item.answer}</Answer>
-              </CardContent>
+      <CardsList
+        data={cardsFromCurrentPack}
+        extraData={cardsFromCurrentPack}
+        ListEmptyComponent={<Placeholder />}
+        renderItem={({ item }) => (
+          <CardContainer onPress={goToCard(item._id)}>
+            <CardContent>
+              <MemoCardStateIndicator state={item.state} />
+              <Question>{item.question}</Question>
+              <Divider />
+              <Answer>{item.answer}</Answer>
+            </CardContent>
 
-              <Menu>
-                <MenuTrigger customStyles={cardMenuStyles.trigger}>
-                  <Entypo name="dots-three-vertical" size={18} color={colors.textGray} />
-                </MenuTrigger>
+            <Menu>
+              <MenuTrigger customStyles={cardMenuStyles.trigger}>
+                <Entypo name="dots-three-vertical" size={18} color={colors.textGray} />
+              </MenuTrigger>
 
-                <MenuOptions customStyles={cardMenuStyles.options}>
-                  <MenuOption
-                    text="Удалить"
-                    onSelect={handleDeleteCard(item._id)}
-                    customStyles={cardMenuStyles.option}
-                  />
-                </MenuOptions>
-              </Menu>
-            </CardContainer>
-          )}
-        />
-      )}
+              <MenuOptions customStyles={cardMenuStyles.options}>
+                <MenuOption
+                  text="Удалить"
+                  onSelect={handleDeleteCard(item._id)}
+                  customStyles={cardMenuStyles.option}
+                />
+              </MenuOptions>
+            </Menu>
+          </CardContainer>
+        )}
+      />
 
       <FloatButton
         icon="plus"

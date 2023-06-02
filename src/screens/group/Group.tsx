@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { ToastAndroid, View } from 'react-native';
+import { ToastAndroid, View, Vibration, Alert } from 'react-native';
 
 import { Stack, useSearchParams } from 'expo-router';
 import { observer } from 'mobx-react';
@@ -72,6 +72,8 @@ const Group = () => {
   };
 
   const deleteElements = async () => {
+    Vibration.vibrate(100);
+
     if (!currentGroup) {
       ToastAndroid.show('Нет информации о группе', ToastAndroid.CENTER);
       return;
@@ -84,6 +86,31 @@ const Group = () => {
       memoPacks: [],
     });
     setMode(EditMode.DEFAULT);
+  };
+
+  const askForDelete = () => {
+    Vibration.vibrate(100);
+
+    Alert.alert(
+      'Удалить элементы из группы?',
+      'Сами элементы не будут удалены',
+      [
+        { text: 'Нет', style: 'cancel' },
+        {
+          text: 'Да',
+          onPress: async () => {
+            await deleteElements();
+          },
+          style: 'destructive',
+        },
+      ],
+      { cancelable: true }
+    );
+  };
+
+  const changeMode = (mode: EditMode) => () => {
+    Vibration.vibrate(100);
+    setMode(mode);
   };
 
   if (typeof groupId !== 'string' || !currentGroup) {
@@ -99,7 +126,7 @@ const Group = () => {
           options={{
             headerTitle: currentGroup.name,
             headerRight: () => (
-              <HeaderMenu groupId={groupId} changeMode={() => setMode(EditMode.EDIT)} />
+              <HeaderMenu groupId={groupId} changeMode={changeMode(EditMode.EDIT)} />
             ),
           }}
         />
@@ -144,11 +171,11 @@ const Group = () => {
 
         {mode === EditMode.EDIT && (
           <ButtonsWrapper>
-            <Button onPress={() => setMode(EditMode.DEFAULT)}>
+            <Button onPress={changeMode(EditMode.DEFAULT)}>
               <ButtonText>Отмена</ButtonText>
             </Button>
 
-            <Button onPress={deleteElements}>
+            <Button onPress={askForDelete}>
               <ButtonText>Удалить</ButtonText>
             </Button>
           </ButtonsWrapper>

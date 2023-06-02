@@ -1,5 +1,5 @@
 import { FC, useState, useEffect, useMemo, memo } from 'react';
-import { Text, ToastAndroid, FlatList } from 'react-native';
+import { Text, ToastAndroid, FlatList, Vibration } from 'react-native';
 
 import { GroupModel } from '@stores/models/group';
 import { Button, ButtonText } from '@styles/components';
@@ -55,7 +55,11 @@ const PickGroupModal: FC<PickGroupModalProps> = ({
   };
 
   const save = async () => {
+    Vibration.vibrate(100);
     onClose();
+    if (!activeId) {
+      return;
+    }
     await onSave(activeId);
     ToastAndroid.show('Добавлено', ToastAndroid.CENTER);
   };

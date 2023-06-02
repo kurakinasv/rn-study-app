@@ -1,5 +1,5 @@
 import { memo, useCallback } from 'react';
-import { Alert, ToastAndroid } from 'react-native';
+import { Alert, ToastAndroid, Vibration } from 'react-native';
 
 import { Entypo } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
@@ -23,6 +23,8 @@ const HeaderMenu = ({ groupId, changeMode }: Props) => {
 
   const handleDeleteGroup = useCallback(
     (id: UniqueId) => () => {
+      Vibration.vibrate(100);
+
       Alert.alert(
         'Удалить группу?',
         'Заметки и наборы карточек, связанные с ней, не будут удалены',
@@ -31,6 +33,7 @@ const HeaderMenu = ({ groupId, changeMode }: Props) => {
           {
             text: 'Да',
             onPress: async () => {
+              Vibration.vibrate(100);
               await deleteGroup(id);
               ToastAndroid.show('Группа удалена', ToastAndroid.CENTER);
               router.push(routes.groups);

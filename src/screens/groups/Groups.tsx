@@ -1,4 +1,5 @@
 import { useEffect, useState, useCallback } from 'react';
+import { Vibration } from 'react-native';
 
 import { Feather } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
@@ -12,6 +13,7 @@ import { GroupModel } from '@stores/models/group';
 import { useGroupsStore, useMemoStore, useNotesStore } from '@stores/RootStore/hooks';
 import { colors } from '@styles/colors';
 import { CardInfo, CardTitle, CardView, CardsList, PageLoader, PageView } from '@styles/components';
+import { UniqueId } from '@typings/common';
 import localizeElementsAmount from '@utils/localizeElementsAmount';
 
 import { GroupContainer } from './Groups.styles';
@@ -48,6 +50,14 @@ const Groups = () => {
     router.push(routes.createGroup);
   }, []);
 
+  const goToGroup = useCallback(
+    (id: UniqueId) => () => {
+      Vibration.vibrate(100);
+      router.push(routes.group(id));
+    },
+    []
+  );
+
   return (
     <>
       {loading && <PageLoader size="large" />}
@@ -68,7 +78,7 @@ const Groups = () => {
             <Placeholder message={!groups.length ? undefined : 'Ничего не найдено'} />
           }
           renderItem={({ item }) => (
-            <GroupContainer onPress={() => router.push(routes.group(item._id))}>
+            <GroupContainer onPress={goToGroup(item._id)}>
               <CardView>
                 <CardTitle>{item.name}</CardTitle>
                 <CardInfo>

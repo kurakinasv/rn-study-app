@@ -1,5 +1,5 @@
 import { useState, useMemo, useEffect, useCallback } from 'react';
-import { Pressable, Alert, ToastAndroid } from 'react-native';
+import { Pressable, Alert, ToastAndroid, Vibration } from 'react-native';
 
 import { Ionicons, MaterialIcons, Feather, AntDesign } from '@expo/vector-icons';
 import { Stack, useRouter } from 'expo-router';
@@ -63,11 +63,14 @@ const Learning = () => {
     if (!currentPack) {
       return;
     }
+    Vibration.vibrate(100);
     const { _id } = cardsFromCurrentPack[currentCardIndex];
     await editCard({ cardId: _id, state, memoPackId: currentPack._id });
   };
 
   const handleEndOfSession = useCallback(async () => {
+    Vibration.vibrate(100);
+
     if (!currentPack) {
       ToastAndroid.show('Не удалось получить данные о наборе', ToastAndroid.CENTER);
       router.back();
