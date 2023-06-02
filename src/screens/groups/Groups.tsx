@@ -5,6 +5,7 @@ import { useRouter } from 'expo-router';
 import { observer } from 'mobx-react';
 
 import FloatButton from '@components/FloatButton';
+import Placeholder from '@components/Placeholder/Placeholder';
 import Search from '@components/Search';
 import { routes } from '@config/routes';
 import { GroupModel } from '@stores/models/group';
@@ -22,10 +23,14 @@ const Groups = () => {
   const { getMemoPacks, memoPacks } = useMemoStore();
   const { getNotes, notes } = useNotesStore();
 
-  const [displayedGroups, setDisplayedGroups] = useState<GroupModel[] | null>(null);
+  const [displayedGroups, setDisplayedGroups] = useState<GroupModel[]>([]);
+
+  useEffect(() => {
+    setDisplayedGroups(groups);
+  }, [groups]);
 
   const init = async () => {
-    await getGroups();
+    await getGroups().then((groups) => setDisplayedGroups(groups));
 
     if (!memoPacks.length) {
       await getMemoPacks();
@@ -58,8 +63,10 @@ const Groups = () => {
         />
 
         <CardsList
-          data={displayedGroups ? displayedGroups : groups}
-          extraData={[groups, displayedGroups]}
+          data={displayedGroups}
+          ListEmptyComponent={
+            <Placeholder message={!groups.length ? undefined : 'Ничего не найдено'} />
+          }
           renderItem={({ item }) => (
             <GroupContainer onPress={() => router.push(routes.group(item._id))}>
               <CardView>

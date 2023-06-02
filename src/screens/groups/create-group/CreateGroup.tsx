@@ -29,7 +29,7 @@ const CreateGroup = () => {
       return;
     }
 
-    await createGroup({ name, deadline: date.toISOString() });
+    await createGroup({ name, deadline: date ? date.toISOString() : undefined });
 
     Alert.alert('Группа создана', '', [
       {
@@ -43,7 +43,7 @@ const CreateGroup = () => {
     setName(text);
   };
 
-  const [date, setDate] = useState<Date>(new Date());
+  const [date, setDate] = useState<Date | null>(null);
   const [mode, setMode] = useState<AndroidMode>('date');
   const [show, setShow] = useState(false);
 
@@ -89,7 +89,7 @@ const CreateGroup = () => {
           {show && (
             <DateTimePicker
               testID="dateTimePicker"
-              value={date}
+              value={date || new Date()}
               mode={mode}
               is24Hour={true}
               onChange={onChange}

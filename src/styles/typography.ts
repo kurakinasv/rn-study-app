@@ -1,4 +1,7 @@
+import { Text } from 'react-native';
+
 import { css } from 'styled-components';
+import styled from 'styled-components/native';
 
 import { colors } from './colors';
 
@@ -48,3 +51,9 @@ export const elementText = (color = colors.white) => {
     color: ${color};
   `;
 };
+
+export const TabBarText = styled.Text`
+  font-size: 10px;
+  color: ${colors.blue};
+  font-family: ${fontFamilies.Rubik};
+` as typeof Text;

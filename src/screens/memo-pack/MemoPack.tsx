@@ -8,6 +8,7 @@ import { Menu, MenuOption, MenuOptions, MenuTrigger } from 'react-native-popup-m
 
 import FloatButton from '@components/FloatButton/FloatButton';
 import MemoCardStateIndicator from '@components/MemoCardStateIndicator';
+import Placeholder from '@components/Placeholder';
 import { routes } from '@config/routes';
 import { useLocalStore } from '@hooks/useLocalStore';
 import MemoCardStore from '@stores/MemoCardStore';
@@ -48,9 +49,7 @@ const MemoPack = () => {
   const router = useRouter();
 
   const { loading, getCardsByPackId, cardsFromCurrentPack, currentPack } = useMemoStore();
-
   const { deleteCard, loading: cardLoading } = useLocalStore(() => new MemoCardStore());
-
   const { registerForPushNotificationsAsync } = useNotificationStore();
 
   useNotification({
@@ -147,33 +146,37 @@ const MemoPack = () => {
         <CardsAmount>{currentPack.cards.length}</CardsAmount>
       </CardsTitleView>
 
-      <CardsList
-        data={cardsFromCurrentPack}
-        renderItem={({ item }) => (
-          <CardContainer onPress={() => router.push(routes.card(packId, item._id))}>
-            <CardContent>
-              <MemoCardStateIndicator state={item.state} />
-              <Question>{item.question}</Question>
-              <Divider />
-              <Answer>{item.answer}</Answer>
-            </CardContent>
+      {!!cardsFromCurrentPack.length && (
+        <CardsList
+          data={cardsFromCurrentPack}
+          extraData={cardsFromCurrentPack}
+          ListEmptyComponent={<Placeholder />}
+          renderItem={({ item }) => (
+            <CardContainer onPress={() => router.push(routes.card(packId, item._id))}>
+              <CardContent>
+                <MemoCardStateIndicator state={item.state} />
+                <Question>{item.question}</Question>
+                <Divider />
+                <Answer>{item.answer}</Answer>
+              </CardContent>
 
-            <Menu>
-              <MenuTrigger customStyles={cardMenuStyles.trigger}>
-                <Entypo name="dots-three-vertical" size={18} color={colors.textGray} />
-              </MenuTrigger>
+              <Menu>
+                <MenuTrigger customStyles={cardMenuStyles.trigger}>
+                  <Entypo name="dots-three-vertical" size={18} color={colors.textGray} />
+                </MenuTrigger>
 
-              <MenuOptions customStyles={cardMenuStyles.options}>
-                <MenuOption
-                  text="Удалить"
-                  onSelect={handleDeleteCard(item._id)}
-                  customStyles={cardMenuStyles.option}
-                />
-              </MenuOptions>
-            </Menu>
-          </CardContainer>
-        )}
-      />
+                <MenuOptions customStyles={cardMenuStyles.options}>
+                  <MenuOption
+                    text="Удалить"
+                    onSelect={handleDeleteCard(item._id)}
+                    customStyles={cardMenuStyles.option}
+                  />
+                </MenuOptions>
+              </Menu>
+            </CardContainer>
+          )}
+        />
+      )}
 
       <FloatButton
         icon="plus"

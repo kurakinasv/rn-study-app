@@ -6,6 +6,7 @@ import { observer } from 'mobx-react';
 
 import MemoPacksListItem from '@components/MemoPacksListItem';
 import NotesListItem from '@components/NotesListItem';
+import Placeholder from '@components/Placeholder';
 import {
   InfoCardNumber,
   InfoCardTime,
@@ -122,6 +123,7 @@ const Group = () => {
         <CardsList
           data={[...groupNotes, ...groupMemoPacks]}
           extraData={groups}
+          ListEmptyComponent={<Placeholder />}
           renderItem={({ item }) =>
             'title' in item ? (
               <NotesListItem

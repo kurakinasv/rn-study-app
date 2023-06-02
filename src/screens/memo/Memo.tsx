@@ -5,6 +5,7 @@ import { observer } from 'mobx-react';
 
 import FloatButton from '@components/FloatButton';
 import MemoPacksListItem from '@components/MemoPacksListItem';
+import Placeholder from '@components/Placeholder';
 import Search from '@components/Search';
 import { routes } from '@config/routes';
 import { MemoPackModel } from '@stores/models/memo';
@@ -14,11 +15,15 @@ import { CardsList, PageLoader, PageView } from '@styles/components';
 const Memo = () => {
   const router = useRouter();
 
-  const { getMemoPacks, loading, memoPacks } = useMemoStore();
+  const { getMemoPacks, loading, memoPacks, currentPack } = useMemoStore();
 
   useEffect(() => {
-    getMemoPacks();
-  }, [memoPacks.length]);
+    getMemoPacks().then((packs) => setDisplayedPacks(packs));
+  }, [memoPacks.length, currentPack]);
+
+  useEffect(() => {
+    setDisplayedPacks(memoPacks);
+  }, [memoPacks, currentPack]);
 
   const goToCreatePack = useCallback(() => {
     router.push(routes.createMemoPack);
@@ -42,8 +47,11 @@ const Memo = () => {
         <Search loading={loading} placeholder="Поиск по наборам" onInputText={search} />
 
         <CardsList
-          data={displayedPacks ? displayedPacks : memoPacks}
+          data={displayedPacks || memoPacks}
           extraData={[memoPacks, displayedPacks]}
+          ListEmptyComponent={
+            <Placeholder message={!memoPacks.length ? undefined : 'Ничего не найдено'} />
+          }
           renderItem={({ item }) => <MemoPacksListItem pack={item} />}
         />
 

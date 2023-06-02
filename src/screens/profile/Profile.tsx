@@ -16,7 +16,7 @@ import {
   PageView,
 } from '@styles/components';
 
-import { FloatButtonWrapper, FormView } from './Profile.styles';
+import { FloatButtonWrapper, FormView, StyledScrollView } from './Profile.styles';
 
 const Profile = () => {
   const router = useRouter();
@@ -67,31 +67,33 @@ const Profile = () => {
       {loading && <PageLoader />}
 
       <PageView>
-        <FormView>
-          <InputView>
-            <InputLabel>Имя</InputLabel>
-            <Input
-              editable={!loading}
-              inputMode="text"
-              onChangeText={handleInput}
-              value={userInfo.username}
-            />
-          </InputView>
+        <StyledScrollView>
+          <FormView>
+            <InputView>
+              <InputLabel>Имя</InputLabel>
+              <Input
+                editable={!loading}
+                inputMode="text"
+                onChangeText={handleInput}
+                value={userInfo.username}
+              />
+            </InputView>
 
-          <InputView>
-            <InputLabel>Email</InputLabel>
-            <Input editable={false} inputMode="email" value={userInfo.email} />
-          </InputView>
+            <InputView>
+              <InputLabel>Email</InputLabel>
+              <Input editable={false} inputMode="email" value={userInfo.email} />
+            </InputView>
 
-          <InputView>
-            <InputLabel>Пароль</InputLabel>
-            <Input editable={false} inputMode="text" value="*************" />
-          </InputView>
-        </FormView>
+            <InputView>
+              <InputLabel>Пароль</InputLabel>
+              <Input editable={false} inputMode="text" value="*************" />
+            </InputView>
+          </FormView>
 
-        <Button onPress={handleLogout}>
-          <ButtonText>Выйти</ButtonText>
-        </Button>
+          <Button onPress={handleLogout}>
+            <ButtonText>Выйти</ButtonText>
+          </Button>
+        </StyledScrollView>
 
         {displayButton && (
           <FloatButtonWrapper>

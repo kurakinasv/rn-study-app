@@ -6,6 +6,7 @@ import { MenuProvider } from 'react-native-popup-menu';
 
 import FloatButton from '@components/FloatButton';
 import NotesListItem from '@components/NotesListItem';
+import Placeholder from '@components/Placeholder';
 import { routes } from '@config/routes';
 import { useAuthStore, useNotesStore } from '@stores/RootStore/hooks';
 import { colors } from '@styles/colors';
@@ -31,12 +32,13 @@ const Notes = () => {
 
   return (
     <MenuProvider>
-      {loading && <PageLoader size="large" color={colors.blue} />}
+      {!!loading && <PageLoader size="large" color={colors.blue} />}
 
       <PageView>
         <NotesList
           data={notes}
           extraData={notes}
+          ListEmptyComponent={<Placeholder />}
           renderItem={({ item }) => (
             <NotesListItem note={item} onDeleteNote={() => deleteNote(item._id)} />
           )}
