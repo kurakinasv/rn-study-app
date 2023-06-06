@@ -4,7 +4,6 @@ import * as Device from 'expo-device';
 import * as Notifications from 'expo-notifications';
 import { makeAutoObservable } from 'mobx';
 
-import { ILocalStore } from '@hooks/useLocalStore';
 import {
   NotificationModel,
   NotificationType,
@@ -15,7 +14,7 @@ import RootStore from '@stores/RootStore';
 import { UniqueId } from '@typings/common';
 import { saveLastIntervalHoursData } from '@utils/notificationsStorage';
 
-class NotificationService implements ILocalStore {
+class NotificationService {
   private readonly _root: RootStore | null = null;
 
   notificationsIds: string[] = [];
@@ -235,12 +234,6 @@ class NotificationService implements ILocalStore {
         console.error(error.message);
       }
     }
-  };
-
-  destroy = () => {
-    this.setNotifications([]);
-    this.setNotificationsIds([]);
-    this.setLoading(false);
   };
 }
 

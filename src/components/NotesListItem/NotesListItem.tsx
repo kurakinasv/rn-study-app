@@ -49,7 +49,7 @@ const NotesListItem = ({ note, editMode, onCheck, onDeleteNote }: Props) => {
 
     Alert.alert(
       'Удалить заметку?',
-      'Зметка будет удалена без возможности восстановления',
+      'Заметка будет удалена без возможности восстановления',
       [
         { text: 'Нет', style: 'cancel' },
         {

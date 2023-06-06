@@ -26,6 +26,7 @@ export const IndicatorWrapper = styled.View`
 
 export const CardWrapper = styled.Pressable`
   position: relative;
+  padding: 16px;
 
   flex: 1;
   align-items: center;

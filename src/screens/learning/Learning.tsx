@@ -46,7 +46,7 @@ const Learning = () => {
     const easy = cardsFromCurrentPack.filter((card) => card.state === 'easy');
     const newCards = cardsFromCurrentPack.filter((card) => card.state === 'new');
 
-    setFiltered([...hard, ...medium, ...easy, ...newCards]);
+    setFiltered([...newCards, ...hard, ...medium, ...easy]);
   }, [cardsFromCurrentPack]);
 
   const {
@@ -64,7 +64,7 @@ const Learning = () => {
       return;
     }
     Vibration.vibrate(100);
-    const { _id } = cardsFromCurrentPack[currentCardIndex];
+    const { _id } = filtered[currentCardIndex];
     await editCard({ cardId: _id, state, memoPackId: currentPack._id });
   };
 
